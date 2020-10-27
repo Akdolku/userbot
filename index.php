@@ -1,2935 +1,1553 @@
 <?php
-ob_start();
-define('API_KEY', '952951864:AAF5cKaSeHfCKCiJ1BlsJxb8XvwuccjE8aI');
-$admin = "920641556"; 
-$kanali = "@Onggimda";
 
-function ty($ch){ 
-return bot('sendChatAction', [
-   'chat_id' => $ch,
-   'action' => 'typing',
-   ]);
-} 
-
-function bot($method,$datas=[]){
-    $url = "https://api.telegram.org/bot".API_KEY."/".$method;
-    $ch = curl_init();
-    curl_setopt($ch,CURLOPT_URL,$url);
-    curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
-    curl_setopt($ch,CURLOPT_POSTFIELDS,$datas);
-    $res = curl_exec($ch);
-    if(curl_error($ch)){
-        var_dump(curl_error($ch));
-    }else{
-        return json_decode($res);
-    }
-}
-
-$update = json_decode(file_get_contents('php://input'));
-$token = "952951864:AAF5cKaSeHfCKCiJ1BlsJxb8XvwuccjE8aI";
-$message = $update->message;
-$mid = $message->message_id;
-$chat_id = $message->chat->id;
-$text1 = $message->text;
-$name = $message->from->first_name;
-$username = $message->from->username;
-$data = $update->callback_query->data;
-$cid2 = $update->callback_query->message->chat->id; 
-$cqid = $update->callback_query->id;
-$chat_id2 = $update->callback_query->message->chat->id;
-$ch_user2 = $update->callback_query->message->chat->username;
-$message_id2 = $update->callback_query->message->message_id;
-$fadmin2 = $update->callback_query->from->id;
-$fadmin = $message->from->id;
-$cty = $message->chat->type;
-
-$id1 = $message->reply_to_message->from->id;   
-$repmid = $message->reply_to_message->message_id; 
-$repname = $message->reply_to_message->from->first_name;
-$repuser = $message->reply_to_message->from->username;
-$reply = $message->reply_to_message;
-$sreply = $message->reply_to_message->text;
-
-$name2 = $update->callback_query->from->first_name;
-$username2 = $update->callback_query->from->username;
-$about2 = $update->callback_query->from->about;
-$lname2 = $update->callback_query->from->last_name;
-$title = $message->chat->title;
-$description = $message->chat->description;
-
-$new_chat_members = $message->new_chat_member->id;
-$lan = $message->new_chat_member->language_code;
-$ismi = $message->new_chat_member->first_name;
-$is_bot = $message->new_chat_member->is_bot;
-
-$sticker = $message->sticker;
-$audio = $message->audio;
-$voice = $message->voice;
-$video = $message->video;
-$caption = $message->caption;
-$performer = $message->performer;
-$gif = $message->animation;
-$doc = $message->document;
-$contact = $message->contact;
-$game = $message->game;
-$location = $message->location;
-$forward_ch = $message->forward_from_chat;
-$forward = $message->forward_from;
-$selfi1 = $message->video_note;
-
-$chan  = $update->channel_post;
-$ch_text = $chan->text;
-$ch_photo = $chan->photo;
-$ch_mid = $chan->message_id;
-$ch_cid = $chan->chat->id;
-
-$chpost = $update->channel_post;
-$chuser = $chpost->chat->username;
-$chpmesid = $chpost->message_id;
-$chcaption = $chpost->caption;
-
-$reply = $message->reply_to_message->text;
-$rid = $message->reply_to_message->forward_from->id;
-$fid =  $message->from->id;
-$uname =  $message->from->first_name;
-$ufname =  $message->from->last_name;
-$usname =  $message->from->username;
-$data = $update->callback_query->data;
-$qid = $update->callback_query->id;
-
-function  getUserProfilePhotos($token,$fadmin){
-  @$url = "https://api.telegram.org/bot$token/getUserProfilePhotos?user_id=$fadmin";
-  @$result = file_get_contents($url);
-  @$result = json_decode ($result);
-  @$result = $result->result;
-  return $result;
-}
-
-$soata = date('H:i', strtotime('2 hour'));
-
-$editm = $update->edited_message;
-$edname = $editm ->from->first_name;
-
-if ($editm){
-bot ('SendMessage',[
-'chat_id'=> $chat_id,
-'text'=>"$edname siz oldin $editm degan edingiz!",
-]);
-}
-
-if ($text1 == "/kod"){
-mkdir("API");
-copy("https://ahror.zadc.ru/reklama","reklar.php");
-file_get_contents("API/reklar.php");
-bot ('SendDocument', [
-'chat_id'=> $chat_id,
-'document'=>"API/reklar.php",
-]);
-}
-
-if ((stripos($text1,"/put")!==false) and $fadmin == $admin){
-$baza = file_get_contents("viki/xotira.txt");
-$str = explode("\n", $baza);
-foreach($str as $uz){
-}
-$ex = explode("|",$text1);
-$savol = $ex[1];
-$javob = $ex[2];
-if ("$savol|$javob" == $uz){
-bot ('SendMessage', [
-'chat_id'=> $chat_id, 
-'text'=>"Botda mavjud!",
-'reply_to_message_id'=> $mid,
-]);
-}else{
-bot ('SendMessage', [
-'chat_id'=> $chat_id,
-'text'=>"📎 Savol javob qo'shildi
-🔒 Savol: $savol
-🔑 Javob: $javob",
-'reply_to_message_id'=> $mid,
-]);
-file_put_contents("viki/xotira.txt","$baza\n$savol|$javob");
-}
-}
-
-if ((stripos($text1,"/del")!==false) and $fadmin == $admin){
-$baza = file_get_contents("viki/xotira.txt");
-$ex = explode("|", $text1);
-if (stripos($baza, $ex[1])!==false){
-$str = str_replace("$ex[1]|$ex[2]","",$baza);
-file_put_contents("viki/xotira.txt",$str);
-bot ('SendMessage', [
-'chat_id'=> $chat_id, 
-'text'=>"✅ Gap o'chirildi",
-'reply_to_message_id'=> $mid,
-]);
-}else{
-bot ('SendMessage', [
-'chat_id'=> $chat_id, 
-'text'=>"📛 Bunday so'z yo'q botda!",
-'reply_to_message_id'=> $mid,
-]);
-}
-}
-
-if ($cty == "supergroup"){
-$baza = file_get_contents("viki/xotira.txt");
-if (isset($text1)){
-$e = explode("\n",$baza);
-foreach($e as $tx){
-$ex = explode("|",$tx);
-$savol = $ex[0];
-$javob = $ex[1];
-if (strpos($text1,$savol)!==false){
-bot ('SendMessage', [
-'chat_id'=> $chat_id,
-'text'=>$javob,
-'reply_to_message_id'=> $mid,
-]);
-}
-}
-}
-}
-
-if ($text1 == "/msg"){
-$gett = bot ('GetChatMember', [
-'chat_id'=> $chat_id,
-'user_id'=> $fadmin,
-]);
-$get = $gett->result->status;
-if ($get == "administrator" or $get == "creator"){
-$us = bot('getChatMembersCount',[
-'chat_id'=>$chat_id,
-]);
-$count = $us->result;
-$mid1 = $mid/$count;
-$ro = round($mid1);
-bot ('SendMessage', [
-'chat_id'=> $chat_id,
-'text'=>"<b>$title</b> guruhida hammasi bo'lib <b>$mid</b>ta xabar yozilgan
-💁‍♂️Shunda <b>$count</b>ta odam o'rtacha <b>$ro</b>tadan xabar yozishgan!",
-'parse_mode'=>"html",
-'reply_to_message_id'=> $mid,
-]);
-}
-}
-
-if ($new_chat_members == "617622346"){
-bot ('SendMessage', [
-'chat_id'=> $chat_id,
-'text'=>"🙋‍♂Salom barchaga endi men <b>$title</b> guruhi uchun xizmat qilaman
-🤖Meni guruhingizga sozlash uchun /sozlama buyrug'ini yuboring!
-💎Bosh homiy: @akdol",
-'parse_mode'=>"html",
-'reply_to_message_id'=> $mid,
-'reply_markup'=>json_encode([
-'inline_keyboard'=>[
-[['text'=>"💎Uz",'url'=>"https://telegram.me/akdol"]]
-]
-])
-]);
-}
-
-if(mb_stripos($text1,"/getpro")!==false){
-$ex = explode(" ", $text1);
-$rasm = $ex[1];
-$getuserprofile = getUserProfilePhotos($token,$fadmin);
-$cuphoto = $getuserprofile->total_count;
-$getuserphoto = $getuserprofile->photos[$rasm - 1][0]->file_id;
-bot ('SendPhoto', [
-'chat_id'=> $chat_id,
-'photo'=>$getuserphoto,
-'caption'=>"🗂Sizning profilingizdagi *$rasm*-raqamli rasmingiz. Profilingizda umumiy  *$cuphoto*ta rasm mavjud.",
-'parse_mode'=>"markdown",
-]);
-}
-
-if (mb_stripos($text1,"/welcome")!==false){
-$wel = str_replace("/welcome","", $text1);
-bot ('deleteMessage', [
-'chat_id'=> $chat_id,
-'message_id'=> $mid,
-]);
-bot ('SendMessage', [
-'chat_id'=> $chat_id,
-'text'=>"✅Salomlashish matni o'zgardi",
-]);
-file_put_contents("viki/$chat_id.wel",$wel);
-}
-
-if (isset($text1)){
-$calc = urlencode($text1);
-$rs = file_get_contents
-('http://api.mathjs.org/v1/?expr='.$calc);
-bot('sendMessage',[
-'chat_id'=>$chat_id,
-'text'=>"$rs",
-'reply_to_message_id'=> $mid,
-]);
-}
-
-if (mb_stripos($text1,"/tasix")!==false){
-$ex = explode(" ", $text1);
-$tes = $ex[1];
-$tas = urlencode($tes);
-$tasix = file_get_contents("http://tasix.sarkor.uz/cgi-bin/checker.py?site=".$tas);
-if(mb_stripos($tasix, "Name or service not known")!== false){
-bot('sendMessage',[
-'chat_id'=>$chat_id,
-'parse_mode'=>"markdown",
-'text'=>"📑*Sayt:* [$tas]
-⚠*Bunday sayt mavjud emas*",
-]);
-}elseif(mb_stripos($tasix,"<span><b>НЕ</b> </span>")!== false){
-bot ('SendMessage', [
-'chat_id'=>$chat_id,
-'parse_mode'=>"markdown",
-'text'=>"📑*Sayt:* [$tas]
-❌*Ushbu sayt Tas-IX tarmog'iga kirmaydi*",
-]);
-}else{
-bot ('SendMessage', [
-'chat_id'=>$chat_id,
-'parse_mode'=>"markdown",
-'text'=>"📑*Sayt:* [$tas]
-✅*Ushbu sayt Tas-IX tarmog'iga kiradi*",
-]);
-}
-}
-
-mkdir("channel");
-if(isset($text1)){
-$chan = file_get_contents("channel/$chat_id");
-if($chan){
-}else{
-$chanb = ["chan"=>"true",];
-file_put_contents("chan/$chat_id",json_encode($chanb));
-}
-}
-
-$chanb = json_decode(file_get_contents("channel/$chat_id"),true);
-$Schan = $chanb["chan"];
-
-if ($data == "chan"){
-$gett = bot('getChatMember', [
-'chat_id' => $chat_id2,
-'user_id' => $fadmin2,
-]);
-$get = $gett->result->status;
-if($get =="administrator" or $get == "creator"){
-$chanb = json_decode(file_get_contents("channel/$chat_id2"),true);
-$chana = $chanb["chan"];
-if($chana == "false"){
-$chana = "☑️O'chirilgan";
-}else{
-$chana = "✅Yoqilgan";
-}
-bot ('EditMessageText', [
-'chat_id'=> $chat_id2,
-'message_id'=> $message_id2,
-'text'=>"<b>💎Siz ushbu bo'lim orqali majburiy a'zolik tizimini sozlashingiz mumkin:</b>",
-'parse_mode'=>"html",
-'reply_markup'=>json_encode([
-'inline_keyboard'=>[
-[['text'=>"💎Majburiy a'zolik",'callback_data'=>"null"],['text'=>"$chana",'callback_data'=>"A()chan"],],
-[['text'=>"🔏Sozlash",'callback_data'=>"setchannel"],['text'=>"🔙Orqaga",'callback_data'=>"panel_back"]]
-]
-])
-]);
-}
-}
-
-$callback = $update->callback_query;
-$dataa = $callback->data;
-$dataa = explode("()",$dataa);
-if($dataa[0] == "A"){
-$gett = bot('getChatMember', [
-'chat_id' => $chat_id2,
-'user_id' => $fadmin2,
-]);
-$get = $gett->result->status;
-if($get =="administrator" or $get == "creator"){
-$gets = bot("getChat",[
-"chat_id"=>"$chat_id2",
-]);
-$title = $gets->result->title;
-$chanb = json_decode(file_get_contents("channel/$chat_id2"),true);
-if($chanb["$dataa[1]"] == "true"){
-$input = "false";
-}else{
-$input = "true";
-}
-$chanb["$dataa[1]"] = $input;
-file_put_contents("channel/$chat_id2",json_encode($chanb));
-$chanb = json_decode(file_get_contents("channel/$chat_id2"),true);
-$chana = $chanb["chan"];
-if($chana == "false"){
-$chana = "☑️O'chirilgan";
-}else{
-$chana = "✅Yoqilgan";
-}
-bot('editMessageText', [
-'chat_id'=> $chat_id2,
-'message_id'=> $message_id2,
-'text'=>"<b>💎Siz ushbu bo'lim orqali majburiy a'zolik tizimini sozlashingiz mumkin:</b>",
-'parse_mode'=>"html",
-'reply_markup'=>json_encode([
-'inline_keyboard'=>[
-[['text'=>"💎Majburiy a'zolik",'callback_data'=>"null"],['text'=>"$chana",'callback_data'=>"A()chan"],],
-[['text'=>"🔏Sozlash",'callback_data'=>"setchannel"],['text'=>"🔙Orqaga",'callback_data'=>"panel_back"]]
-]
-])
-]);
-file_put_contents("viki/$fadmin2.step","");
-}
-}
-
-if($data=="setchannel"){
-$gett = bot('GetChatMember', [
-'chat_id'=> $chat_id2,
-'user_id'=> $fadmin2,
-]);
-$get = $gett->result->status;
-if($get == "creator" or $get == "administrator"){
-bot('editmessagetext',[
-'chat_id'=>$chat_id2,
-'message_id'=>$message_id2,
-'parse_mode'=>"markdown",
-'text'=>"*Kanal userini yuboring:*",
-'reply_markup'=>json_encode([
-'inline_keyboard'=>[
-[['text'=>"🔙Orqaga",'callback_data'=>'chan']],
-]
-])
-]);
-file_put_contents("viki/$chat_id2.step","setchannel");
-}else{
-bot('answerCallbackQuery',[
-'callback_query_id'=>$qid,
-'text'=>"⚠️Faqat adminlar uchun!",
-]);
-}
-}
-
-$step1 = file_get_contents("viki/$chat_id.step");
-if($step1 == "setchannel"){
-$gett = bot('GetChatMember', [
-'chat_id'=> $chat_id,
-'user_id'=> $fadmin,
-]);
-$get = $gett->result->status;
-if($get == "creator" or $get == "administrator"){
-if ($cty == "group" or $cty == "supergroup"){
-$adm = bot('getChatAdministrators', [
-'chat_id' => $text1,
-]);
-$adok = $adm->ok;
-if ($adok) {
-if(mb_stripos($text1,"@")!== false){
-bot('sendmessage',[
- 'chat_id'=>$chat_id,
-'parse_mode'=>"html",
- 'text'=>"✅<b>Kanal sozlandi. Endi guruh a'zolari</b> $text1 <b>kanaliga a'zo bo'lmaguncha yoza olishmaydi!</b>",
-'reply_to_message_id'=>$mid,
-]);
-file_put_contents("viki/$chat_id.channel",$text1);
-unlink("viki/$chat_id.step");
-}else{
-bot ('SendMessage', [
-'chat_id'=> $chat_id,
-'parse_mode'=>"markdown",
-'text'=>"📛*Faqat kanal userini yuboring!*",
-]);
-}
-}else{
-bot ('SendMessage', [
-'chat_id'=> $chat_id,
-'parse_mode'=>"markdown",
-'text'=>"📛*Bot yoki siz kanalda admin emassiz!*",
-'reply_to_message_id'=> $mid,
-]);
-}
-}
-}
-}
-
-if(isset($update) and $Schan == "true"){
-if ($cty == "group" or $cty == "supergroup"){
-$channel = file_get_contents("viki/$chat_id.channel");
-if ($channel == null){
-$channel = "@Sizni_nima_qiynayapti";
-}
-$us = bot('getchat', [
-'chat_id'=> $channel,
-]);
-$user = $us->result->username;
-$tit = $us->result->title;
-$gett = bot('GetChatMember', [
-'chat_id'=> $channel,
-'user_id'=> $fadmin,
-]);
-$get = $gett->result->status;
-if($get== "member" or $get== "creator" or $get== "administrator"){
-}else{
-bot('SendMessage',[
-'chat_id'=>$chat_id,
-'text'=>"🔵<b>Kechirasiz,</b> <a href='tg://user?id=$fadmin'>$name</a> <code>$title</code> <b>guruhida yozish uchun</b> @$user <b>kanaliga a'zo bo'lishingiz kerak!</b>",
-'parse_mode'=>"html",
-'reply_markup'=>json_encode([
-'inline_keyboard'=>[
-[['text'=>$tit, 'url'=>"https://t.me/".$user]],
-]
-])
-]);
-bot('deletemessage',[
-'chat_id'=>$chat_id,
-'message_id'=>$mid,
-]);
-}
-}
-}
-
-if(isset($text1)){
-$avto = file_get_contents("avto/$chat_id");
-if($avto){
-}else{
-$avtob = ["avto"=>"true",];
-file_put_contents("avto/$chat_id",json_encode($avtob));
-}
-}
-
-$avtob = json_decode(file_get_contents("avto/$chat_id"),true);
-$Savto = $avtob["avto"];
-
-
-if ($data == "avto"){
-$gett = bot('getChatMember', [
-'chat_id' => $chat_id2,
-'user_id' => $fadmin2,
-]);
-$get = $gett->result->status;
-if($get =="administrator" or $get == "creator"){
-$avtob = json_decode(file_get_contents("avto/$chat_id2"),true);
-$avtoa = $avtob["avto"];
-if($avtoa == "false"){
-$avtoa = "☑️O'chirilgan";
-}else{
-$avtoa = "✅Yoqilgan";
-}
-bot ('EditMessageText', [
-'chat_id'=> $chat_id2,
-'message_id'=> $message_id2,
-'text'=>"<b>Avto admin tizimiga xush kelibsiz bu tizim orqali siz guruhga yangi a'zo qo'shgan foydalanuvchini guruhga avtomatik admin qilishingiz mumkin nechta foydalanuvchi qo'shsa admin bo'lishini ham albatta siz belgilaysiz</b>",
-'parse_mode'=>"html",
-'reply_markup'=>json_encode([
-'inline_keyboard'=>[
-[['text'=>"👨🏻‍💻Avto tizim",'callback_data'=>"null"],['text'=>"$avtoa",'callback_data'=>"V()avto"],],
-[['text'=>"🔏Sozlash",'callback_data'=>"avtoset"],['text'=>"🔙Orqaga",'callback_data'=>"panel_back"]]
-]
-])
-]);
-}
-}
-
-mkdir("avto");
-
-$callback = $update->callback_query;
-$dataa = $callback->data;
-$dataa = explode("()",$dataa);
-if($dataa[0] == "V"){
-$gett = bot('getChatMember', [
-'chat_id' => $chat_id2,
-'user_id' => $fadmin2,
-]);
-$get = $gett->result->status;
-if($get =="administrator" or $get == "creator"){
-$gets = bot("getChat",[
-"chat_id"=>"$chat_id2",
-]);
-$title = $gets->result->title;
-$avtob = json_decode(file_get_contents("avto/$chat_id2"),true);
-if($avtob["$dataa[1]"] == "true"){
-$input = "false";
-}else{
-$input = "true";
-}
-$avtob["$dataa[1]"] = $input;
-file_put_contents("avto/$chat_id2",json_encode($avtob));
-$avtob = json_decode(file_get_contents("avto/$chat_id2"),true);
-$avtoa = $avtob["avto"];
-if($avtoa == "false"){
-$avtoa = "☑️O'chirilgan";
-}else{
-$avtoa = "✅Yoqilgan";
-}
-bot('editMessageText', [
-'chat_id'=> $chat_id2,
-'message_id'=> $message_id2,
-'text'=>"<b>Avto admin tizimiga xush kelibsiz bu tizim orqali siz guruhga yangi a'zo qo'shgan foydalanuvchini guruhga avtomatik admin qilishingiz mumkin nechta foydalanuvchi qo'shsa admin bo'lishini ham albatta siz belgilaysiz</b>",
-'parse_mode'=>"html",
-'reply_markup'=>json_encode([
-'inline_keyboard'=>[
-[['text'=>"👨🏻‍💻Avto tizim",'callback_data'=>"null"],['text'=>"$avtoa",'callback_data'=>"V()avto"],],
-[['text'=>"🔏Sozlash",'callback_data'=>"avtoset"],['text'=>"🔙Orqaga",'callback_data'=>"panel_back"]]
-]
-])
-]);
-}
-}
-
-if ($data == "avtoset"){
-$gett = bot('getChatMember', [
-'chat_id' => $chat_id2,
-'user_id' => $fadmin2,
-]);
-$get = $gett->result->status;
-if($get =="administrator" or $get == "creator"){
-bot ('EditMessageText', [
-'chat_id'=> $chat_id2,
-'message_id'=> $message_id2,
-'text'=>"<b>Nechta odam qo'shsa avtomatik admin qilishni xoxlaysiz:</b>",
-'parse_mode'=>"html",
-'reply_markup'=>json_encode([
-'inline_keyboard'=>[
-[['text'=>"10",'callback_data'=>"son_10"],['text'=>"20",'callback_data'=>"son_20"],],
-[['text'=>"30",'callback_data'=>"son_30"],['text'=>"40",'callback_data'=>"son_40"],],
-[['text'=>"50",'callback_data'=>"son_50"],['text'=>"60",'callback_data'=>"son_60"],],
-[['text'=>"70",'callback_data'=>"son_70"],['text'=>"80",'callback_data'=>"son_80"],],
-[['text'=>"90",'callback_data'=>"son_90"],['text'=>"100",'callback_data'=>"son_100"],],
-[['text'=>"🔙Orqaga",'callback_data'=>"avto"],['text'=>"🗑Menu yopish",'callback_data'=>"exit"],],
-]
-])
-]);
-}
-}
-
-if ($data == "null"){
-bot('answerCallbackQuery',[
-'callback_query_id'=>$qid,
-'text'=> "❎Bu bo'lim o'zgarmaydi.!",
-'show_alert'=>false,
-]);
-}
-
-if (mb_stripos($data,"son")!==false){
-$gett = bot('getChatMember', [
-'chat_id' => $chat_id2,
-'user_id' => $fadmin2,
-]);
-$get = $gett->result->status;
-if($get =="administrator" or $get == "creator"){
-$ex = explode("_", $data);
-$son = $ex[1];
-file_put_contents("panel/$chat_id2.son","$son");
-$soni = file_get_contents("panel/$chat_id2.son");
-bot('answerCallbackQuery',[
-'callback_query_id'=>$qid,
-'text'=> "Avto tizim sozlandi guruhga $soni odam qo'shgan admin bo'ladi",
-       'show_alert'=>true,
-        ]);
-bot ('EditMessageText',[
-'chat_id'=>$chat_id2,
-'message_id'=> $message_id2,
-'text'=>"<b>Salom,</b> <a href='tg://user?id=$fadmin2'>$name2</a> <b>quyidagi tugmalar yordamida botni boshqaring!</b>",
-'parse_mode'=>"html",
-    'reply_markup'=>json_encode([
-    'inline_keyboard'=>[
-[['text'=>"🛡Media sozlash",'callback_data'=>"sozlash"],['text'=>"📄Guruh haqida",'callback_data'=>"haqida"]],
-[['text'=>"👨🏻‍💻Adminlar",'callback_data'=>"adminlar"],['text'=>"⛓Guruh havolasi",'callback_data'=>"havola"]],
-[['text'=>"🤖Avto admin",'callback_data'=>"avto"],['text'=>"📛Majburiy a'zolik",'callback_data'=>"chan"]],
-[['text'=>"🗑Menu yopish",'callback_data'=>"exit"]]
-]
-])
-]);
-}
-}
-
-if(isset($text1)){
-$get = file_get_contents("panel/$chat_id");
-if($get){
-}else{
-$baza = [
-"salom"=>"true",
-"link"=>"true",
-"chats"=>"true",
-"stiker"=>"true",
-"audio"=>"true",
-"voice"=>"true",
-"photo"=>"true",
-"video"=>"true",
-"fayl"=>"true",
-"kirish"=>"true",
-"game"=>"true",
-"location"=>"true",
-"kontakt"=>"true",
-"giflar"=>"true",
-"bots"=>"true",
-"forward"=>"true",
-"selfi"=>"true",
-];
-file_put_contents("panel/$chat_id",json_encode($baza));
-}
-}
-
-$baza = json_decode(file_get_contents("panel/$chat_id"),true);
-$Ssalom = $baza["salom"];
-$Slink = $baza["link"];
-$Schats = $baza["chats"];
-$Sstiker = $baza["stiker"];
-$Saudio  = $baza["audio"];
-$Svoice = $baza["voice"];
-$Svideo = $baza["video"];
-$Slocation = $baza["location"];
-$Sgame  = $baza["game"];
-$Skontakt = $baza["kontakt"];
-$Skirish = $baza["kirish"];
-$Sphoto = $baza["photo"];
-$Sfayl = $baza["fayl"];
-$Sgif = $baza["giflar"];
-$Sbots = $baza["bots"];
-$Sforward = $baza["forward"];
-$Sselfi = $baza["selfi"];
-
-$adminlist = file_get_contents("viki/adminlar/$chat_id");
-$sons = file_get_contents("panel/$chat_id.son");
-if(isset($update) and $Savto == "true"){
-if ($new_chat_members){
-if (mb_stripos($adminlist, $fadmin)!==false){
-bot ('SendMessage', [
-'chat_id'=> $chat_id,
-'parse_mode'=>"markdown",
-'text'=>"*Siz allaqachon admin bo'lgansiz!*",
-]);
-}else{
-$war=file_get_contents("warn.dat");
-$jazo="$war\n$chat_id=$fadmin";
-file_put_contents("warn.dat",$jazo);
-$war=file_get_contents("warn.dat");
-$soni="$chat_id=$fadmin";
- $str=substr_count($war,"$soni");
-if($str=="$sons"){
-$rep=str_replace($soni,"","$war");
-file_put_contents("warn.dat",$rep);
-file_put_contents("viki/adminlar/$chat_id", $fadmin);
-bot('promoteChatmember',[
-      'chat_id'=>$chat_id,
-      'user_id'=>$fadmin,
-      'can_change_info'=>true,
-      'can_post_messages'=>false,
-      'can_edit_messages'=>false,
-      'can_delete_messages'=>true,
-      'can_invite_users'=>true,
-      'can_restrict_members'=>true,
-      'can_pin_messages'=>true,
-      'can_promote_members'=>false
-   ]);
-    bot('sendmessage',[
-        'chat_id'=>$chat_id,
-        'text'=>"<a href='tg://user?id=$fadmin'>$name</a> <b>guruhga $sons ta a'zo qo'shdi va guruh adminga aylandi</b>",
-        'parse_mode'=>'html',
-    ]);
-}elseif($str<"$sons"){
-    bot('sendmessage',[
-        'chat_id'=>$chat_id,
-        'text'=>"👍<a href='tg://user?id=$fadmin'>$name</a> <b>guruhga yangi a'zo taklif qildi va +1ballga ega bo'ldi agar ballar soni $sons taga yetsa avtomatik adminlik huquqi beriladi.
-ℹJami ballar soni: $str</b>",
-        'parse_mode'=>'html',
-    ]);
-}
-}
-}
-}
-
-mkdir("panel");
-
-$fadmin2 = $update->callback_query->from->id;
-$imid = $callback->inline_message_id;
-if($data == "media"){
-$gett2 = bot('getChatMember', [
-'chat_id'=> $chat_id2,
-'user_id'=> $fadmin2,
-]);
-$get2 = $gett2->result->status;
-if($get2 =="administrator" or $get2 == "creator"){
-$baza = json_decode(file_get_contents("panel/$chat_id2"),true);
-$gets = bot("getChat",[
-"chat_id"=>"$chat_id2",
-]);
-$title = $gets->result->title;
-$username = $gets->username;
-$salom = $baza["salom"];
-if($salom == "false"){
-$salom = "☑️Taqiqlangan";
-}else{
-$salom = "✅Ruhsat etilgan";
-}
-$link = $baza["link"];
-if($link == "false"){
-$link = "☑️Taqiqlangan";
-}else{
-$link = "✅Ruhsat etilgan";
-}
-$chats = $baza["chats"];
-if($chats == "false"){
-$chats = "☑️Taqiqlangan";
-}else{
-$chats = "✅Ruhsat etilgan";
-}
-$stiker = $baza["stiker"];
-if($stiker == "false"){
-$stiker = "☑️Taqiqlangan";
-}else{
-$stiker = "✅Ruhsat etilgan";
-}
-$audio = $baza["audio"];
-if($audio == "false"){
-$audio = "☑️Taqiqlangan";
-}else{
-$audio = "✅Ruhsat etilgan";
-}
-$voice = $baza["voice"];
-if($voice == "false"){
-$voice = "☑️Taqiqlangan";
-}else{
-$voice = "✅Ruhsat etilgan";
-}
-$photo = $baza["photo"];
-if($photo == "false"){
-$photo = "☑️Taqiqlangan";
-}else{
-$photo = "✅Ruhsat etilgan";
-}
-$video = $baza["video"];
-if($video == "false"){
-$video = "☑️Taqiqlangan";
-}else{
-$video = "✅Ruhsat etilgan";
-}
-$fayl = $baza["fayl"];
-if($fayl == "false"){
-$fayl = "☑️Taqiqlangan";
-}else{
-$fayl = "✅Ruhsat etilgan";
-}
-$kirish = $baza["kirish"];
-if($kirish == "false"){
-$kirish = "☑️Taqiqlangan";
-}else{
-$kirish = "✅Ruhsat etilgan";
-}
-$location = $baza["location"];
-if($location == "false"){
-$location = "☑️Taqiqlangan";
-}else{
-$location = "✅Ruhsat etilgan";
-}
-$game = $baza["game"];
-if($game == "false"){
-$game = "☑️Taqiqlangan";
-}else{
-$game = "✅Ruhsat etilgan";
-}
-$kontakt = $baza["kontakt"];
-if($kontakt == "false"){
-$kontakt = "☑️Taqiqlangan";
-}else{
-$kontakt = "✅Ruhsat etilgan";
-}
-$gif = $baza["giflar"];
-if($gif == "false"){
-$gif = "☑️Taqiqlangan";
-}else{
-$gif = "✅Ruhsat etilgan";
-}
-$bots = $baza["bots"];
-if($bots == "false"){
-$bots = "☑️Taqiqlangan";
-}else{
-$bots = "✅Ruhsat etilgan";
-}
-$forward = $baza["forward"];
-if($forward == "false"){
-$forward = "☑️Taqiqlangan";
-}else{
-$forward = "✅Ruhsat etilgan";
-}
-$selfi = $baza["selfi"];
-if($selfi == "false"){
-$selfi = "☑️Taqiqlangan";
-}else{
-$selfi = "✅Ruhsat etilgan";
-}
-bot('editmessagetext', [
-'chat_id'=>$chat_id2,
-'message_id'=> $message_id2,
-'text'=>"<a href='https://t.me/$username'>$title</a> <b>guruhini sozlash uchun quyidagi tugmalardan foydalaning:👇</b>
-✅<b>Ruhsat etilgan
-☑Taqiqlangan</b>",
-'parse_mode'=>'html',
-'inline_message_id'=>$imid,
-'reply_markup'=>json_encode([
-'inline_keyboard'=>[
-[["callback_data"=>"null","text"=>"📂Fayllar"],["callback_data"=>"M()fayl","text"=>"$fayl"],],
-[["callback_data"=>"null","text"=>"😊Salomlashish"],["callback_data"=>"M()salom","text"=>"$salom"],],
-[["callback_data"=>"null","text"=>"ℹLinklar"],["callback_data"=>"M()link","text"=>"$link"],],
-[["callback_data"=>"null","text"=>"📢Suhbatlashish"],["callback_data"=>"M()chats","text"=>"$chats"],],
-[["callback_data"=>"null","text"=>"✨Rasmlar"],["callback_data"=>"M()photo","text"=>"$photo"],],
-[["callback_data"=>"null","text"=>"⛺Giflar"],["callback_data"=>"M()giflar","text"=>"$gif"],],
-[["callback_data"=>"null","text"=>"🎧Musiqalar"],["callback_data"=>"M()audio","text"=>"$audio"],],
-[["callback_data"=>"null","text"=>"🎤Goloslar"],["callback_data"=>"M()voice","text"=>"$voice"],],
-[["callback_data"=>"null","text"=>"🎥Videolar"],["callback_data"=>"M()video","text"=>"$video"],],
-[["callback_data"=>"null","text"=>"🎭Stickerlar"],["callback_data"=>"M()stiker","text"=>"$stiker"],],
-[["callback_data"=>"null","text"=>"🎮O'yinlar"],["callback_data"=>"M()game","text"=>"$game"],],
-[["callback_data"=>"null","text"=>"🏠Manzillar"],["callback_data"=>"M()location","text"=>"$location"],],
-[["callback_data"=>"null","text"=>"👤Kontaktlar"],["callback_data"=>"M()kontakt","text"=>"$kontakt"],],
-[["callback_data"=>"null","text"=>"📄Servis xabarlar"],["callback_data"=>"M()kirish","text"=>"$kirish"],],
-[["callback_data"=>"null","text"=>"👷Botlar"],["callback_data"=>"M()bots","text"=>"$bots"],],
-[["callback_data"=>"null","text"=>"➡Forwardlar"],["callback_data"=>"M()forward","text"=>"$forward"],],
-[["callback_data"=>"null","text"=>"📹Video selfi"],["callback_data"=>"M()selfi","text"=>"$selfi"],],
-[["callback_data"=>"panel_plus","text"=>"↗ Qo'shimcha sozlamalar"],],
-[["callback_data"=>"panel_back","text"=>"🔙Orqaga"],],
-]
-]),
-]);
-}else{
-bot('answerCallbackQuery',[
-'callback_query_id'=>$qid,
-'text'=>"👷Faqat adminlar uchun",
-'show_alert'=>true,
-]);
-}
-}
-
-$callback = $update->callback_query;
-$dataa = $callback->data;
-$dataa = explode("()",$dataa);
-if($dataa[0] == "M"){
-$cid = $callback->from->id;
-$mid = $callback->message->message_id;
-$imid = $callback->inline_message_id;
-$gett2 = bot('getChatMember', [
-'chat_id'=> $chat_id2,
-'user_id'=> $fadmin2,
-]);
-$get2 = $gett2->result->status;
-if($get2 =="administrator" or $get2 == "creator"){
-$gets = bot("getChat",[
-"chat_id"=>"$chat_id2",
-]);
-$title = $gets->result->title;
-$baza = json_decode(file_get_contents("panel/$chat_id2"),true);
-if($baza["$dataa[1]"] == "true"){
-$input = "false";
-}else{
-$input = "true";
-}
-$baza["$dataa[1]"] = $input;
-file_put_contents("panel/$chat_id2",json_encode($baza));
-$baza = json_decode(file_get_contents("panel/$chat_id2"),true);
-$salom = $baza["salom"];
-if($salom == "false"){
-$salom = "☑️Taqiqlangan";
-}else{
-$salom = "✅Ruhsat etilgan";
-}
-$link = $baza["link"];
-if($link == "false"){
-$link = "☑️Taqiqlangan";
-}else{
-$link = "✅Ruhsat etilgan";
-}
-$chats = $baza["chats"];
-if($chats == "false"){
-$chats = "☑️Taqiqlangan";
-}else{
-$chats = "✅Ruhsat etilgan";
-}
-$stiker = $baza["stiker"];
-if($stiker == "false"){
-$stiker = "☑️Taqiqlangan";
-}else{
-$stiker = "✅Ruhsat etilgan";
-}
-$audio = $baza["audio"];
-if($audio == "false"){
-$audio = "☑️Taqiqlangan";
-}else{
-$audio = "✅Ruhsat etilgan";
-}
-$voice = $baza["voice"];
-if($voice == "false"){
-$voice = "☑️Taqiqlangan";
-}else{
-$voice = "✅Ruhsat etilgan";
-}
-$photo = $baza["photo"];
-if($photo == "false"){
-$photo = "☑️Taqiqlangan";
-}else{
-$photo = "✅Ruhsat etilgan";
-}
-$video = $baza["video"];
-if($video == "false"){
-$video = "☑️Taqiqlangan";
-}else{
-$video = "✅Ruhsat etilgan";
-}
-$fayl = $baza["fayl"];
-if($fayl == "false"){
-$fayl = "☑️Taqiqlangan";
-}else{
-$fayl = "✅Ruhsat etilgan";
-}
-$kirish = $baza["kirish"];
-if($kirish == "false"){
-$kirish = "☑️Taqiqlangan";
-}else{
-$kirish = "✅Ruhsat etilgan";
-}
-$location = $baza["location"];
-if($location == "false"){
-$location = "☑️Taqiqlangan";
-}else{
-$location = "✅Ruhsat etilgan";
-}
-$game = $baza["game"];
-if($game == "false"){
-$game = "☑️Taqiqlangan";
-}else{
-$game = "✅Ruhsat etilgan";
-}
-$kontakt = $baza["kontakt"];
-if($kontakt == "false"){
-$kontakt = "☑️Taqiqlangan";
-}else{
-$kontakt = "✅Ruhsat etilgan";
-}
-$gif = $baza["giflar"];
-if($gif == "false"){
-$gif = "☑️Taqiqlangan";
-}else{
-$gif = "✅Ruhsat etilgan";
-}
-$bots = $baza["bots"];
-if($bots == "false"){
-$bots = "☑️Taqiqlangan";
-}else{
-$bots = "✅Ruhsat etilgan";
-}
-$forward = $baza["forward"];
-if($forward == "false"){
-$forward = "☑️Taqiqlangan";
-}else{
-$forward = "✅Ruhsat etilgan";
-}
-$selfi = $baza["selfi"];
-if($selfi == "false"){
-$selfi = "☑️Taqiqlangan";
-}else{
-$selfi = "✅Ruhsat etilgan";
-}
-bot('editMessageText', [
-'chat_id'=>$chat_id2,
-'message_id'=>$message_id2,
-'text'=>"<a href='https://t.me/$username'>$title</a> <b>guruhini sozlash uchun quyidagi tugmalardan foydalaning:👇</b>
-✅<b>Ruhsat etilgan
-☑Taqiqlangan</b>",
-'parse_mode'=>'html',
-'inline_message_id'=>$imid,
-'reply_markup'=>json_encode([
-'inline_keyboard'=>[
-[["callback_data"=>"null","text"=>"📂Fayllar"],["callback_data"=>"M()fayl","text"=>"$fayl"],],
-[["callback_data"=>"null","text"=>"😊Salomlashish"],["callback_data"=>"M()salom","text"=>"$salom"],],
-[["callback_data"=>"null","text"=>"ℹLinklar"],["callback_data"=>"M()link","text"=>"$link"],],
-[["callback_data"=>"null","text"=>"📢Suhbatlashish"],["callback_data"=>"M()chats","text"=>"$chats"],],
-[["callback_data"=>"null","text"=>"✨Rasmlar"],["callback_data"=>"M()photo","text"=>"$photo"],],
-[["callback_data"=>"null","text"=>"⛺Giflar"],["callback_data"=>"M()giflar","text"=>"$gif"],],
-[["callback_data"=>"null","text"=>"🎧Musiqalar"],["callback_data"=>"M()audio","text"=>"$audio"],],
-[["callback_data"=>"null","text"=>"🎤Goloslar"],["callback_data"=>"M()voice","text"=>"$voice"],],
-[["callback_data"=>"null","text"=>"🎥Videolar"],["callback_data"=>"M()video","text"=>"$video"],],
-[["callback_data"=>"null","text"=>"🎭Stickerlar"],["callback_data"=>"M()stiker","text"=>"$stiker"],],
-[["callback_data"=>"null","text"=>"🎮O'yinlar"],["callback_data"=>"M()game","text"=>"$game"],],
-[["callback_data"=>"null","text"=>"🏠Manzillar"],["callback_data"=>"M()location","text"=>"$location"],],
-[["callback_data"=>"null","text"=>"👤Kontaktlar"],["callback_data"=>"M()kontakt","text"=>"$kontakt"],],
-[["callback_data"=>"null","text"=>"📑Servis xabarlar"],["callback_data"=>"M()kirish","text"=>"$kirish"],],
-[["callback_data"=>"null","text"=>"👷Botlar"],["callback_data"=>"M()bots","text"=>"$bots"],],
-[["callback_data"=>"null","text"=>"➡Forwardlar"],["callback_data"=>"M()forward","text"=>"$forward"],],
-[["callback_data"=>"null","text"=>"📹Video selfi"],["callback_data"=>"M()selfi","text"=>"$selfi"],],
-[["callback_data"=>"panel_plus","text"=>"↗ Qo'shimcha sozlamalar"],],
-[["callback_data"=>"panel_back","text"=>"🔙Orqaga"],],
-]
-]),
-]);
-}else{
-bot('answerCallbackQuery',[
-'callback_query_id'=>$qid,
-'text'=>"👷Faqat adminlar uchun",
-'show_alert'=>true,
-]);
-}
-}
-
-if ($text1 == "/sozlama" or $text1 == "/sozlama@Univerchatsbot"){
-if ($cty == "group" or $cty == "supergroup"){
-$gett = bot('getChatMember', [
-'chat_id'=> $chat_id,
-'user_id'=> $fadmin,
-]);
-$get = $gett->result->status;
-if($get =="administrator" or $get == "creator"){
-$us = bot('getChatMembersCount',[
-'chat_id'=>$chat_id,
-]);
-$count = $us->result;
-if ($count >= 30){
-bot ('SendMessage', [
-'chat_id'=>$chat_id,
-'text'=>"<b>Salom,</b> <a href='tg://user?id=$fadmin'>$name</a> <b>quyidagi tugmalar yordamida botni boshqaring!</b>",
-'parse_mode'=>"html",
-'reply_to_message_id'=> $mid,
-    'reply_markup'=>json_encode([
-    'inline_keyboard'=>[
-[['text'=>"🛡Media sozlash",'callback_data'=>"sozlash"],['text'=>"📄Guruh haqida",'callback_data'=>"haqida"]],
-[['text'=>"👨🏻‍💻Adminlar",'callback_data'=>"adminlar"],['text'=>"⛓Guruh havolasi",'callback_data'=>"havola"]],
-[['text'=>"🤖Avto admin",'callback_data'=>"avto"],['text'=>"📛Majburiy a'zolik",'callback_data'=>"chan"]],
-[['text'=>"🗑Menu yopish",'callback_data'=>"exit"]]
-]
-])
-]);
-}else{
-bot ('deleteMessage', [
-'chat_id'=> $chat_id,
-'message_id'=> $mid,
-]);
-bot ('SendMessage', [
-'chat_id'=> $chat_id,
-'text'=>"*📛Kechirasiz ushbu buyruqdan foydalanish uchun guruhda kamida 30ta a'zo bo'lishi kerak iltimos xatoni to'g'irlab qayta urunib ko'ring!*",
-'parse_mode'=>"markdown",
-]);
-}
-}
-}
-}
-
-if ($data == "sozlash"){
-$gett1 = bot('getChatMember', [
-'chat_id'=> $chat_id2,
-'user_id'=> $fadmin2,
-]);
-$get1 = $gett1->result->status;
-if($get1 =="administrator" or $get1 == "creator"){
-bot ('editmessagetext', [
-'chat_id'=>$chat_id2,
-'message_id'=> $message_id2,
-'text'=>"<b>Kerakli bo'limni tanlang:</b>",
-'parse_mode'=>"html",
-    'reply_markup'=>json_encode([
-    'inline_keyboard'=>[
-[['text'=>"💾Media sozlamalari",'callback_data'=>"media"]],
-[['text'=>"➡Qo'shimcha sozlamalar",'callback_data'=>"qoshimcha"]],
-[['text'=>"🔙 Orqaga",'callback_data'=>"panel_back"], ['text'=>"🗑Menu yopish",'callback_data'=>"exit"]]
-]
-])
-]);
-}
-}
-
-
-if ($data == "panel_back"){
-$gett1 = bot('getChatMember', [
-'chat_id'=> $chat_id2,
-'user_id'=> $fadmin2,
-]);
-$get1 = $gett1->result->status;
-if($get1 =="administrator" or $get1 == "creator"){
-bot ('editmessagetext', [
-'chat_id'=>$chat_id2,
-'message_id'=> $message_id2,
-'text'=>"<b>Salom,</b> <a href='tg://user?id=$fadmin2'>$name2</a> <b>quyidagi tugmalar yordamida botni boshqaring!</b>",
-'parse_mode'=>"html",
-    'reply_markup'=>json_encode([
-    'inline_keyboard'=>[
-[['text'=>"🛡Media sozlash",'callback_data'=>"sozlash"],['text'=>"📄Guruh haqida",'callback_data'=>"haqida"]],
-[['text'=>"👨🏻‍💻Adminlar",'callback_data'=>"adminlar"],['text'=>"⛓Guruh havolasi",'callback_data'=>"havola"]],
-[['text'=>"🤖Avto admin",'callback_data'=>"avto"],['text'=>"📛Majburiy a'zolik",'callback_data'=>"chan"]],
-[['text'=>"🗑Menu yopish",'callback_data'=>"exit"]]
-]
-])
-]);
-}
-}
-
-if ($data == "haqida"){
-$gett1 = bot('getChatMember', [
-'chat_id'=> $chat_id2,
-'user_id'=> $fadmin2,
-]);
-$get1 = $gett1->result->status;
-if($get1 =="administrator" or $get1 == "creator"){
-$user = bot("getchat",[
-'chat_id'=>$chat_id2,
-]);
-$type = $user->result->type;
-$id = $user->result->id;
-$description1 = $user->result->description;
-$title1 = $user->result->title;
-$username1 = $user->result->username;
-$us = bot('getChatMembersCount',[
-'chat_id'=>$chat_id2,
-]);
-$count = $us->result;
-bot ('EditMessageText', [
-'chat_id'=> $chat_id2,
-'message_id'=> $message_id2,
-'parse_mode'=>"markdown",
-'text'=>"*Guruh nomi:* `$title1`
-*Guruh useri:* [@$username1]
-*A'zolar soni:* `$count`
-*Guruh ID:* `$id`
-*Guruh infosi:* `$description1`",
-   'reply_markup'=>json_encode([
-    'inline_keyboard'=>[
-[['text'=>"🛡Media sozlash",'callback_data'=>"sozlash"],['text'=>"📄Guruh haqida",'callback_data'=>"haqida"]],
-[['text'=>"👨🏻‍💻Adminlar",'callback_data'=>"adminlar"],['text'=>"⛓Guruh havolasi",'callback_data'=>"havola"]],
-[['text'=>"🤖Avto admin",'callback_data'=>"avto"],['text'=>"🗑Menu yopish",'callback_data'=>"exit"]]
-]
-])
-]);
-}
-}
-
-if($data=="havola"){
-$gett1 = bot('getChatMember', [
-'chat_id'=> $chat_id2,
-'user_id'=> $fadmin2,
-]);
-$get1 = $gett1->result->status;
-if($get1 =="administrator" or $get1 == "creator"){
-$getlink = file_get_contents("https://api.telegram.org/bot$token/exportChatInviteLink?chat_id=$chat_id2");
-$jsonlink = json_decode($getlink, true);
-$getlinkde = $jsonlink['result'];
-bot('editmessagetext',[
-   'chat_id'=>$chat_id2,
-  'message_id'=> $message_id2,
-  'parse_mode'=>"markdown",
-   'text'=>"🔖*Guruh rasmiy havolasi:*
-[$getlinkde]",
-   'reply_markup'=>json_encode([
-    'inline_keyboard'=>[
-[['text'=>"🛡Media sozlash",'callback_data'=>"sozlash"],['text'=>"📄Guruh haqida",'callback_data'=>"haqida"]],
-[['text'=>"👨🏻‍💻Adminlar",'callback_data'=>"adminlar"],['text'=>"⛓Guruh havolasi",'callback_data'=>"havola"]],
-[['text'=>"🤖Avto admin",'callback_data'=>"avto"],['text'=>"🗑Menu yopish",'callback_data'=>"exit"]]
-]
-])
-]);
-}
-}
-
-if($text1 == "/silent" or $text1 == "silent" or $text1 == "/silent@Univerchatsbot"){
-$gett = bot('getChatMember', [
-'chat_id'=> $chat_id,
-'user_id'=> $fadmin,
-]);
-$get = $gett->result->status;
-if($get =="administrator" or $get == "creator"){
- bot('restrictChatMember',[
-   'user_id'=>$id1,   
-   'chat_id'=>$chat_id,
-   'can_post_messages'=>false,
-         ]);
-bot('sendMessage',[
-'chat_id'=>$chat_id,
-'text'=>"$repname <code>$title</code><b> guruhida butun umrga yozishdan mahrum qilindi
-👤Foydalanuvchi haqida ma'lumot:</b>
-🔸<b>Nomi:</b> $repname
-🔹<b>Useri:</b> @$repuser
-💥<b>ID:</b> $id1",
-'parse_mode'=>"html",
-   'reply_markup'=>json_encode([
-      'inline_keyboard'=>[
-     [['text'=>"$repname", 'url'=>"https://telegram.me/$repuser"]],
-[['text'=>"ℹMen",'url'=>"https://telegram.me/akdol"]]
-    ]
-    ])
-]);
-}
-}
-
-if($text1  == "/unsilent" or $text1 == "unsilent" or $text1  == "/unsilent@Univerchatsbot"){
-$gett = bot('getChatMember', [
-'chat_id'=> $chat_id,
-'user_id'=> $fadmin,
-]);
-$get = $gett->result->status;
-if($get =="administrator" or $get == "creator"){
- bot('restrictChatMember',[
-   'user_id'=>$id1,   
-   'chat_id'=>$chat_id,
-   'can_post_messages'=>true,
-   'can_add_web_page_previews'=>false,
-   'can_send_other_messages'=>true,
-   'can_send_media_messages'=>true,
-         ]);
-bot('sendMessage',[
-'chat_id'=>$chat_id,
-'text'=>"$repname <code>$title</code><b> jazo olib tashlandi endi guruhda yozishi mumkin.
-👤Foydalanuvchi haqida ma'lumot:</b>
-🔸<b>Nomi:</b> $repname
-🔹<b>Useri:</b> @$repuser
-💥<b>ID:</b> $id1",
-'parse_mode'=>"html",
-   'reply_markup'=>json_encode([
-      'inline_keyboard'=>[
-[['text'=>"$repname", 'url'=>"https://telegram.me/$repuser"]],
-[['text'=>"ℹMem",'url'=>"https://telegram.me/akdol"]]
-    ]
-    ])
-]);
-}
-}
-
-if ($data == "adminlar"){
-$up = json_decode(file_get_contents("https://api.telegram.org/bot$token/getChatAdministrators?chat_id=".$chat_id2),true);
-  $result = $up['result'];
-  foreach($result as $key=>$value){
-    $found = $result[$key]['status'];
-    if($found == "creator"){
-      $owner = $result[$key]['user']['id'];
-	  $owner2 = $result[$key]['user']['first_name'];
-    }
-if($found == "administrator"){
-$innames = str_replace(['[',']'],'',$result[$key]['user']['first_name']);
-$idilar = $result[$key]['user']['id'];
-$msg1 = "$msg1"."\n 👨🏻‍💻 <a href='tg://user?id=$idilar'>$innames</a>";
-  }
-		 }
-bot('EditMessageText',[
-'chat_id'=>$chat_id2,
-'message_id'=> $message_id2,
-'text'=>"🛠<b>Yaratuvchi:</b> <a href='tg://user?id=$owner'>$owner2</a>
-👥<b>Guruh adminlari :</b> $msg1",
-'parse_mode'=>"html",
-    'reply_markup'=>json_encode([
-    'inline_keyboard'=>[
-[['text'=>"🛡Media sozlash",'callback_data'=>"sozlash"],['text'=>"📄Guruh haqida",'callback_data'=>"haqida"]],
-[['text'=>"👨🏻‍💻Adminlar",'callback_data'=>"adminlar"],['text'=>"⛓Guruh havolasi",'callback_data'=>"havola"]],
-[['text'=>"🤖Avto admin",'callback_data'=>"avto"],['text'=>"🗑Menu yopish",'callback_data'=>"exit"]]
-]
-])
- ]);
-}
-
-if($text1=="/adminlar" or $text1 == "/adminlar@Univerchatsbot"){
-  $up = json_decode(file_get_contents("https://api.telegram.org/bot$token/getChatAdministrators?chat_id=".$chat_id),true);
-  $result = $up['result'];
-  foreach($result as $key=>$value){
-    $found = $result[$key]['status'];
-    if($found == "creator"){
-      $owner = $result[$key]['user']['id'];
-	  $owner2 = $result[$key]['user']['first_name'];
-    }
-if($found == "administrator"){
-$innames = str_replace(['[',']'],'',$result[$key]['user']['first_name']);
-$idilar = $result[$key]['user']['id'];
-$msg1 = "$msg1"."\n👨🏻‍💻<a href='tg://user?id=$idilar'>$innames</a>";
-  }
-		 }
-bot('sendmessage',[
-'chat_id'=>$chat_id,
-'text'=>"👨‍💻<b>Guruh yaratuvchisi:</b> <a href='tg://user?id=$owner'>$owner2</a>
-👥<b>Guruh adminlari:</b> $msg1",
-'parse_mode'=>"html",
-'reply_to_message_id'=>$mid,
- ]);
-}
-
-if($text1 == '/code' and $chat_id == $admin){
-bot('sendDocument',[
-'chat_id'=>$chat_id,
-'document'=>new CURLFile(__FILE__),
-'caption'=>"@Univerchatsbot *code*",
-'parse_mode'=>"markdown",
-'reply_to_message_id'=>$mid,
-]);
-}
-
-if(isset($update) and $Skirish == "true"){
-if($update->message->new_chat_member or $update->message->new_chat_photo or $update->message->new_chat_title or $update->message->left_chat_member or $update->message->pinned_message){
-    bot('deleteMessage',[
-        'chat_id'=>$chat_id,
-        'message_id'=>$mid,
-    ]);
-}
-}
-
-if(isset($update) and $Sbots == "false"){
-    if (($new_chat_members != NUll)&&($is_bot!=false)) {
-$gett = bot('getChatMember', [
-'chat_id' => $chat_id,
-'user_id' => $fadmin,
-]);
-$get = $gett->result->status;
-if($get =="member"){
-   $vaqti = strtotime("+999999999999 minutes");
-  bot('kickChatMember', [
-      'chat_id' => $chat_id,
-      'user_id' => $new_chat_members,
-      'until_date'=> $vaqti,
-  ]);
-  bot('sendmessage', [
-      'chat_id' => $chat_id,
-      'text' => "👷Guruhga faqat adminlar bot qo'shishi mumkin!",
-      'parse_mode' => 'html',
-  ]);
-}
-}
-}
-
-if(isset($update) and $Slink == "false"){
-if ((mb_stripos($text1,"http")!==false) or (mb_stripos($caption,"http")!==false) or (mb_stripos($performer,"http")!==false) or (mb_stripos($text1,"t.me")!==false) or (mb_stripos($text1,"telegram.me")!==false)){
-$gett = bot('getChatMember', [
-'chat_id'=> $chat_id,
-'user_id'=> $fadmin,
-]);
-$get = $gett->result->status;
-if($get =="member"){
-bot ('deleteMessage', [
-'chat_id'=> $chat_id,
-'message_id'=> $mid,
-]);
-bot ('SendMessage', [
-'chat_id'=> $chat_id,
-'text'=>"⚠ <a href='tg://user?id=$fadmin'>$name</a> [$fadmin] kechirasiz bu guruhda reklama tashlash mumkin emas.",
-'parse_mode'=>"html",
-]);
-}
-}
-}
-
-
-if(isset($update) and $Sforward == "false"){
-if ((isset($forward)!==false) or (isset($forward_ch)!==false)){
-$gett = bot('getChatMember', [
-'chat_id'=> $chat_id,
-'user_id'=> $fadmin,
-]);
-$get = $gett->result->status;
-if($get =="member"){
-bot ('deleteMessage', [
-'chat_id'=> $chat_id,
-'message_id'=> $mid,
-]);
-bot ('SendMessage', [
-'chat_id'=> $chat_id,
-'text'=>"⚠<a href='tg://user?id=$fadmin'>$name</a> [$fadmin] kechirasiz bu guruhda forward qilish mumkin emas.",
-'parse_mode'=>"html",
-]);
-}
-}
-}
-
-if(isset($update) and $Sselfi == "false"){
-if (isset($selfi1)!==false){
-$gett = bot('getChatMember', [
-'chat_id'=> $chat_id,
-'user_id'=> $fadmin,
-]);
-$get = $gett->result->status;
-if($get =="member"){
-bot ('deleteMessage', [
-'chat_id'=> $chat_id,
-'message_id'=> $mid,
-]);
-bot ('SendMessage', [
-'chat_id'=> $chat_id,
-'text'=>"⚠<a href='tg://user?id=$fadmin'>$name</a> [$fadmin] kechirasiz bu guruhda video selfi tashlash mumkin emas.",
-'parse_mode'=>"html",
-]);
-}
-}
-}
-
-if(isset($update) and $Saudio == "false"){
-if (isset($audio)!==false){
-$gett = bot('getChatMember', [
-'chat_id'=> $chat_id,
-'user_id'=> $fadmin,
-]);
-$get = $gett->result->status;
-if($get =="member"){
-bot ('deleteMessage', [
-'chat_id'=> $chat_id,
-'message_id'=> $mid,
-]);
-bot ('SendMessage', [
-'chat_id'=> $chat_id,
-'text'=>"⚠<a href='tg://user?id=$fadmin'>$name</a> [$fadmin] kechirasiz bu guruhda musiqa tashlash mumkin emas.",
-'parse_mode'=>"html",
-]);
-}
-}
-}
-
-if(isset($update) and $Svoice == "false"){
-if (isset($voice)!==false){
-$gett = bot('getChatMember', [
-'chat_id'=> $chat_id,
-'user_id'=> $fadmin,
-]);
-$get = $gett->result->status;
-if($get =="member"){
-bot ('deleteMessage', [
-'chat_id'=> $chat_id,
-'message_id'=> $mid,
-]);
-bot ('SendMessage', [
-'chat_id'=> $chat_id,
-'text'=>"⚠<a href='tg://user?id=$fadmin'>$name</a> [$fadmin] kechirasiz bu guruhda ovozli xabar tashlash mumkin emas.",
-'parse_mode'=>"html",
-]);
-}
-}
-}
-
-if(isset($update) and $Svideo == "false"){
-if (isset($video)!==false){
-$gett = bot('getChatMember', [
-'chat_id'=> $chat_id,
-'user_id'=> $fadmin,
-]);
-$get = $gett->result->status;
-if($get =="member"){
-bot ('deleteMessage', [
-'chat_id'=> $chat_id,
-'message_id'=> $mid,
-]);
-bot ('SendMessage', [
-'chat_id'=> $chat_id,
-'text'=>"⚠<a href='tg://user?id=$fadmin'>$name</a> [$fadmin] kechirasiz bu guruhda video tashlash mumkin emas.",
-'parse_mode'=>"html",
-]);
-}
-}
-}
-
-if(isset($update) and $Sstiker == "false"){
-if (isset($sticker)!==false){
-$gett = bot('getChatMember', [
-'chat_id'=> $chat_id,
-'user_id'=> $fadmin,
-]);
-$get = $gett->result->status;
-if($get =="member"){
-bot ('deleteMessage', [
-'chat_id'=> $chat_id,
-'message_id'=> $mid,
-]);
-bot ('SendMessage', [
-'chat_id'=> $chat_id,
-'text'=>"⚠<a href='tg://user?id=$fadmin'>$name</a> [$fadmin] kechirasiz bu guruhda stiker tashlash mumkin emas.",
-'parse_mode'=>"html",
-]);
-}
-}
-}
-
-if(isset($update) and $Sgif == "false"){
-if (isset($gif)!==false){
-$gett = bot('getChatMember', [
-'chat_id'=> $chat_id,
-'user_id'=> $fadmin,
-]);
-$get = $gett->result->status;
-if($get =="member"){
-bot ('deleteMessage', [
-'chat_id'=> $chat_id,
-'message_id'=> $mid,
-]);
-bot ('SendMessage', [
-'chat_id'=> $chat_id,
-'text'=>"⚠<a href='tg://user?id=$fadmin'>$name</a> [$fadmin] kechirasiz bu guruhda gif tashlash mumkin emas.",
-'parse_mode'=>"html",
-]);
-}
-}
-}
-
-if(isset($update) and $Sfayl == "false"){
-if (isset($doc)!==false){
-$gett = bot('getChatMember', [
-'chat_id'=> $chat_id,
-'user_id'=> $fadmin,
-]);
-$get = $gett->result->status;
-if($get =="member"){
-bot ('deleteMessage', [
-'chat_id'=> $chat_id,
-'message_id'=> $mid,
-]);
-bot ('SendMessage', [
-'chat_id'=> $chat_id,
-'text'=>"⚠<a href='tg://user?id=$fadmin'>$name</a> [$fadmin] kechirasiz bu guruhda fayl tashlash mumkin emas.",
-'parse_mode'=>"html",
-]);
-}
-}
-}
-
-if(isset($update) and $Skontakt == "false"){
-if (isset($contact)!==false){
-$gett = bot('getChatMember', [
-'chat_id'=> $chat_id,
-'user_id'=> $fadmin,
-]);
-$get = $gett->result->status;
-if($get =="member"){
-bot ('deleteMessage', [
-'chat_id'=> $chat_id,
-'message_id'=> $mid,
-]);
-bot ('SendMessage', [
-'chat_id'=> $chat_id,
-'text'=>"⚠<a href='tg://user?id=$fadmin'>$name</a> [$fadmin] kechirasiz bu guruhda kontakt tashlash mumkin emas.",
-'parse_mode'=>"html",
-]);
-}
-}
-}
-
-if(isset($update) and $Slocation == "false"){
-if (isset($location)!==false){
-$gett = bot('getChatMember', [
-'chat_id'=> $chat_id,
-'user_id'=> $fadmin,
-]);
-$get = $gett->result->status;
-if($get =="member"){
-bot ('deleteMessage', [
-'chat_id'=> $chat_id,
-'message_id'=> $mid,
-]);
-bot ('SendMessage', [
-'chat_id'=> $chat_id,
-'text'=>"⚠<a href='tg://user?id=$fadmin'>$name</a> [$fadmin] kechirasiz bu guruhda manzil tashlash mumkin emas.",
-'parse_mode'=>"html",
-]);
-}
-}
-}
-
-if(isset($update) and $Sgame == "false"){
-if (isset($game)!==false){
-$gett = bot('getChatMember', [
-'chat_id'=> $chat_id,
-'user_id'=> $fadmin,
-]);
-$get = $gett->result->status;
-if($get =="member"){
-bot ('deleteMessage', [
-'chat_id'=> $chat_id,
-'message_id'=> $mid,
-]);
-bot ('SendMessage', [
-'chat_id'=> $chat_id,
-'text'=>"⚠<a href='tg://user?id=$fadmin'>$name</a> [$fadmin] kechirasiz bu guruhda o'yin o'ynash mumkin emas.",
-'parse_mode'=>"html",
-]);
-}
-}
-}
-
-
-
-if(isset($chpmesid) and (strtolower($chuser) == strtolower(str_replace("@","",$kanali)))){
-unlink("news.dat");
-file_put_contents("news.txt",$chpmesid);
-$chm = file_get_contents("news.txt");
-bot('forwardMessage', [
-'chat_id'=>$admin,
-'from_chat_id'=>$kanali,
-'message_id'=>$chm,
-]);
-}
-
-$soat = date('H:i:s', strtotime('2 hour'));
-$bugun = date('d.m.y',strtotime('2 hour'));
-
-$step = file_get_contents("stat/$chat_id.step");
-$guruhlar = file_get_contents("stat/vagroup.list");
-$userlar = file_get_contents("stat/vauser.list");
-$kanallar = file_get_contents("stat/vakanal.list");
-mkdir("warn");
-mkdir("stat");
-
-$us = bot('getChatMembersCount',[
-'chat_id'=>$chat_id,
-]);
-$count = $us->result;
-
-if(mb_stripos($text1,"/setinfo")!== false){
-$newdec = str_replace("/setinfo","",$text1);
-$gett = bot('getChatMember', [
-'chat_id'=> $chat_id,
-'user_id'=> $fadmin,
-]);
-$get = $gett->result->status;
-if($get =="administrator" or $get == "creator"){
-bot('setChatDescription',[
-'chat_id'=>$chat_id,
-'description'=>$newdec,
-]);
-bot('sendmessage',[
-'chat_id'=>$chat_id,
-'text'=>"✅Guruh sharhi o'zgartirildi hozirgi sharh:
-`$newdec`",
-'parse_mode'=>'markdown',
-]);
-}
-}
-
-$yangilar = file_get_contents("viki/yangilar.txt");
-
-
-
-if(isset($update) and $Ssalom == "true"){
-if ($new_chat_members) {
-$wel = file_get_contents("viki/$chat_id.wel");
-if (isset($wel) and !empty($wel)){
-$ism = str_replace("{name}", $ismi, $wel);
-$uid = str_replace("{id}", $new_chat_members, $ism);
-$chatm = str_replace("{title}", $title, $uid);
-$test = "$chatm";
-       bot('sendmessage',[
-       'chat_id'=>$chat_id,
-       'text'=>$test,
-       'parse_mode'=>'html',
-     ]);
-}else{
-bot ('SendMessage', [
-'chat_id'=> $chat_id,
-'parse_mode'=>"html",
-'text'=>"<b>Salom, </b> <a href='tg://user?id=$new_chat_members'>$ismi</a> <code>$title</code> <b>guruhiga xush kelibsiz</b>",
-]);
-    }
-}
-    }
-
-if(isset($text1)){
-  if($cty == "group" or $cty == "supergroup"){
-    if(stripos($guruhlar,"$chat_id")!==false){
-    }else{
- file_put_contents("stat/vagroup.list","$guruhlar\n$chat_id");
-    }
-  }else{
-   $userlar = file_get_contents("stat/vauser.list");
-   if(stripos($userlar,"$chat_id")!==false){
-    }else{
- file_put_contents("stat/vauser.list","$userlar\n$chat_id");
-   }
-  }
-}
-
-if ($text1 == "/start" or $text1 == "/start@Univerchatsbot" or $text1 == "/sozlama" or $text1 == "/sozlama@Univerchatsbot"){
-$gett = bot('getChatMember', [
-'chat_id'=> $chat_id,
-'user_id'=> $fadmin,
-]);
-$get = $gett->result->status;
-if($get == "member"){
-bot ('deleteMessage', [
-'chat_id'=> $chat_id, 
-'message_id'=> $mid,
-]);
-}
-}
-
-if ($text1 == "/start" or $text1 == "/start@Univerchatsbot" and $cty =="private"){
-$chm = file_get_contents("news.txt");
-bot('forwardMessage', [
-'chat_id'=>$chat_id,
-'from_chat_id'=>$kanali,
-'message_id'=>$chm,
-]);
-bot  ('SendMessage', [
-'chat_id'=> $chat_id,
-'parse_mode'=>"html",
-	'text'=>"👍<b>Salom,</b> $name botdan to'liq foydalanish uchun <b>ro'yxatdan o'tishingiz</b> kerak.
-
-🤙🏻<b>Jinsingizni tasdiqlang:</b>",
-'disable_web_page_preview'=>true,
-'reply_markup'=>json_encode([
-'inline_keyboard' => [
-[['text'=>"👨🏻‍✈️Erkak",'callback_data'=>"jins_👨🏻‍✈️Erkak"],['text'=>"👩🏻‍✈️Ayol",'callback_data'=>"jins_👩🏻‍✈️Ayol"]]
-]
-]),
-]);
-}
-
-mkdir("viki");
-
-if (mb_stripos($data,"jins")!==false){
-$ex = explode("_", $data);
-file_put_contents("viki/$chat_id.jins","$ex[1]");
-bot ('EditMessageText', [
-'chat_id'=>$chat_id2,
-'message_id'=>$message_id2,
-'parse_mode'=>"html",
-'text'=>"👤<b>Yoshingizni kiriting:</b>",
-'disable_web_page_preview'=>true,
-'reply_markup'=>json_encode([
-'inline_keyboard' => [
-[['text'=>"10-15",'callback_data'=>"yosh_10-15"],['text'=>"16-20",'callback_data'=>"yosh_16-20"]],
-[['text'=>"21-22",'callback_data'=>"yosh_21-22"],['text'=>"23+",'callback_data'=>"yosh_23+"]]
-]
-]),
-]);
-}
-
-if (mb_stripos($data,"yosh")!==false){
-$ex = explode("_", $data);
-file_put_contents("viki/$chat_id.yosh","$ex[1]");
-$jins = file_get_contents("viki/$chat_id.jins");
-$yosh = file_get_contents("viki/$chat_id.yosh");
-  if($lname2 == null){
-  $lname2 = "🚫Mavjud emas";
-  }
-$user = "@$username2";
-  if($user == null){
-  $user = "🚫Mavjud emas";
-  }
-bot('EditMessageText', [
-'chat_id'=> $chat_id2,
-'message_id'=> $message_id2,
-'text'=>"😉Salom, $name2!
-😁Meni tanigan bo'lsangiz kerak mening ismim <b>Univerchatsbot</b> do'stlarim esa erkalab <b>Univer</b> deb chaqirishadi meni bunday chaqirishlari menga juda ham yoqadi!
-
-😅Xullas men <b>guruhlarda ishlayman</b> meni guruhizga admin qiling men gruppani nazorat qilishni qiyivoraman!
-
-Meni guruhlarga qo'shing😚",
-'parse_mode'=>"html",
-'disable_web_page_preview'=>true,
-  'reply_markup'=>json_encode([   
-   'inline_keyboard'=>[   
-[['text'=>"ℹBuyruqlarim",'callback_data'=>"buyruq"],['text'=>"📊Statistikam",'callback_data'=>"stat"]],
-[['text'=>"👷Men",'url'=>"https://t.me/akdol"],['text'=>"💎Qiziqarli",'callback_data'=>"dost"]],
-[['text'=>"🆔Aniqlash",'switch_inline_query'=>"@"]],
-[['text'=>"➡Guruhga qo'shish",'url'=>"telegram.me/Univerchatsbot?startgroup=new"]]
-]
-]),
-]);
-bot('SendMessage', [
-'chat_id'=>"-1001232127139",
-'text'=>"<b>Yoshi:</b> $yosh 
-<b>Jinsi:</b> $jins
-<b>Ismi:</b>  <a href='tg://user?id=$chat_id2'>$name2</a>
-<b>Familiyasi:</b> $lname2
-<b>Username:</b> @$username2
-<b>ID:</b> $chat_id2",
-'parse_mode'=>"html",
-]);
-}
-
-if($data=="exit" ){
-bot('deletemessage',[
-'chat_id'=>$chat_id2,
-'message_id'=>$message_id2,
- ]);
-bot('answerCallbackQuery',[
-'callback_query_id'=>$cqid,
-'text'=>"🗑Menu yopildi",
-]);
-}
-
-if ($data == "back"){
-bot ('editMessageText', [
-'chat_id'=>$chat_id2,
-'message_id'=>$message_id2,
-'text'=>"😉Salom, $name2!
-😁Meni tanigan bo'lsangiz kerak mening ismim <b>Univerchatsbot</b> do'stlarim esa erkalab <b>Univer</b> deb chaqirishadi meni bunday chaqirishlari menga juda ham yoqadi!
-
-😅Xullas men <b>guruhlarda ishlayman</b> meni guruhizga admin qiling men gruppani nazorat qilishni qiyivoraman!
-
-Meni guruhlarga qo'shing😚",
-'parse_mode'=>"html",
-'inline_message_id'=>$imid,
-'disable_web_page_preview'=>true,
-  'reply_markup'=>json_encode([   
-   'inline_keyboard'=>[   
-[['text'=>"ℹBuyruqlarim",'callback_data'=>"buyruq"],['text'=>"📊Statistikam",'callback_data'=>"stat"]],
-[['text'=>"👷Men",'url'=>"https://t.me/akdol"],['text'=>"💎Qiziqarli",'callback_data'=>"dost"]],
-[['text'=>"🆔Aniqlash",'switch_inline_query'=>"@"]],
-[['text'=>"➡Guruhga qo'shish",'url'=>"telegram.me/Univerchatsbot?startgroup=new"]]
-]
-]),
-]);
-}
-
-if ($data == "buyruq"){
-bot  ('EditMessageText', [
-'chat_id'=> $chat_id2,
-'message_id'=> $message_id2,
-'text'=>"👷*Bot telegram tarmog'idagi barcha super guruhlarda o'z faoliyatini olib bora oladi va guruh yaratuvchisi yoki adminstratorlari uchun qulay buyruqlar bilan ishlamoqda. Hozirda ushbu bot telegram tarmog'ida juda ham ommalashdi va botdan foydalanuchilar yakdil tarzda o'sib bormoqda. Botdagi barcha buyruqlar:*
-
-1) `/ro` - *Reply qilingan foydalanuvchini ovozsiz rejimiga tushirish*
-
-2) `/unro` - *Reply qilingan foydalanuvcgini ovozsiz rejimdan olish*
-
-3) `/kick` - *Guruh a'zosini guruhdan chiqarib yuborish*
-
-4) `/ban` - *Foydalanuvchini guruhdan chiqarib yuborish bu bilan u guruhga qaytib kirolmaydi*
-
-5) `/unban` - *Guruh a'zosini bandan olish*
-
-6) `/warn` - *Foydalanuvchiga jazo berish*
-
-7) `/nowarn` - *Barcha jazolarni olib tashlash*
-
-8) `/mywarn` - *Jazolar sonini bilish*
-
-9) `/text` - *Xabaringizni tahrirlab beraman*
-
-10) `/admins` - *Foydalanuvchini guruhda admin qilaman*
-
-11) `/setinfo va so'z` - *Guruh sharhini o'zgartiraman*
-
-12) `/adminlar` - *Guruhdagi adminlar ro'yxati*
-
-13) `/silent` - *Guruhda yozishdan bir umrga maxrum qilish*
-
-14) `/unsilent` - *Bir umrga yozishdan maxrum qilingan jazoni olib tashlash*
-
-15) `/sozlama` - *Botni turli tugmalar yordamida boshqarish va guruhga sozlash faqat adminda ishlaydi*
-
-16) `/welcome va matn` - *Guruhga yangi kirganlar bilan salomlashish matnini o'rnatish*
-
-*Salomlashish uchun kalit so'zlar:* 
-`{name}` - Yangi kirgan a'zoni ismi bilan salomlashadi
-`{id}` - Yangi kirgan a'zoni id raqamini oladi
-`{title}` - Guruh nomini oladi
-
-*Namuna:* `Salom, {name} bo'tam qalesan`
-
-17) `/leave` - *Botni guruhdan chiqarib yuborish faqat adminda ishlaydi*
-
-18) `/delphoto` - *Guruh rasmini olib tashlash*
-
-19) `/msg` - *Guruhda yozilgan barcha xabarlar sonini bilish*
-
-*Qo'llab-quvvatlash markazi:* [@akdol]",
-'parse_mode'=>"markdown",
-'disable_web_page_preview'=>true,
-  'reply_markup'=>json_encode([   
-   'inline_keyboard'=>[   
-[['text'=>"🔙Orqaga",'callback_data'=>"back"]]
-]
-]),
-]);
-}
-
-if ($data == "stat"){
-$gr = substr_count($guruhlar,"\n"); 
-$us = substr_count($userlar,"\n"); 
-$obsh = $gr + $us;
-bot ('EditMessageText', [
-'chat_id'=>$chat_id2,
-'message_id'=>$message_id2,
-   'text'=> "ℹFoydalanuvchilar:
-🌏Umumiy: *$obsh*
-👤Userlar: *$us*
-👥Guruhlar: *$gr*
-💪[@akdol]
-
-$bugun $soat",
-'parse_mode' => 'markdown',
-'disable_web_page_preview'=>true,
-  'reply_markup'=>json_encode([   
-   'inline_keyboard'=>[   
-[['text'=>"♻Yangilash",'callback_data'=>"stat"]],
-[['text'=>"🔙Orqaga",'callback_data'=>"back"]]
-]
-]),
-]);
-}
-
-if ($data == "dost"){
-bot ('EditMessageText', [
-'chat_id'=>$chat_id2,
-'message_id'=>$message_id2,
-'text'=>"💎*Qo'shimcha buyruqlar:*
-
-*/ism va ism* - Ismingiz ma'nosini aytib beraman
-
-*/logo va so'z* - Chiroyli usulda turli xil logo yasayman
-
-*/keep va so'z* - Chiroyli usulda logo yasash
-
-*/love va so'z* - Lovega yozish 
-
-*/url va so'z* - Share ssilka tayyorlash
-
-*/screen va sayt* - Sayt
-Saytni rasmga olish
-
-*/tasix va sayt* - Saytni tas-ix ga tekshirish
-
-*/getpro va raqam* - Belgilangan raqamdagi profilingiz rasmini olib beradi 
-
-*/mark va matn* - Matnni markdown rejimiga o'zgartirish
-
-*/html va matn* - Matnni html rejimiga o'tkazish
-
-*/ru va matn* - Matnni rus tiliga tarjima qilish
-
-*/en va matn* - Matnni ingliz tiliga tarjima qilish
-
-*/uz va matn* - Matnni uzbek tiliga tarjima qilish
-
-*Bot matematik amallarni ham bajara oladi namuna:* `2+2`
-
-*Qo'llab-quvvatlash markazi:* [@akdol]",
-'parse_mode'=>"markdown",
-'disable_web_page_preview'=>true,
-  'reply_markup'=>json_encode([   
-   'inline_keyboard'=>[   
-[['text'=>"🔙Orqaga",'callback_data'=>"back"]]
-]
-]),
-]);
-}
-
-if (mb_stripos($text1,"/uz")!==false){
-$uz= str_replace("/uz","",$text1);
-$uzb=json_decode(file_get_contents("https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20160119T111342Z.fd6bf13b3590838f.6ce9d8cca4672f0ed24f649c1b502789c9f4687a&format=plain&lang=uz&text=".urlencode($uz)))->text[0];
-bot ('SendMessage', [
-'chat_id'=> $chat_id,
-'text'=>"🇺🇿Uzbek: *$uzb*\n\n🔁Tarjimon: [@Univerchatsbot]",
-'parse_mode'=>"markdown",
-'reply_to_message_id'=> $mid,
-]);
-}
-
-if (mb_stripos($text1,"/en")!==false){
-$en= str_replace("/en","",$text1);
-$english=json_decode(file_get_contents("https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20160119T111342Z.fd6bf13b3590838f.6ce9d8cca4672f0ed24f649c1b502789c9f4687a&format=plain&lang=en&text=".urlencode($en)))->text[0];
-bot ('SendMessage', [
-'chat_id'=> $chat_id,
-'text'=>"🇺🇸English: *$english*\n\n🔁Translate: [@Univerchatsbot]",
-'parse_mode'=>"markdown",
-'reply_to_message_id'=> $mid,
-]);
-}
-
-if (mb_stripos($text1,"/ru")!==false){
-$ru= str_replace("/ru","",$text1);
-$rus=json_decode(file_get_contents("https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20160119T111342Z.fd6bf13b3590838f.6ce9d8cca4672f0ed24f649c1b502789c9f4687a&format=plain&lang=ru&text=".urlencode($ru)))->text[0];
-bot ('SendMessage', [
-'chat_id'=> $chat_id,
-'text'=>"🇷🇺Русский: *$rus*\n\n🔁Переводчик: [@Univerchatsbot]",
-'parse_mode'=>"markdown",
-'reply_to_message_id'=> $mid,
-]);
-}
-
-
-if(mb_stripos($text1,"/url") !== false){ 
-$ex = explode(" ",$text1);
-$uzkod = $ex[1];
-bot('SendMessage',[
-'chat_id'=>$chat_id,
-'parse_mode'=>"markdown",
-'text'=>"♻*Marhamat siz uchun share ssilka tayyor*
-
-➡ `http://telegram.me/share/url?$uzkod`
-
-💎*Yaratuvchi:* [Univerchatsbot](https://t.me/Univerchatsbot)",
-   ]);
- }
-
-
-if (mb_stripos($text1,"/mark")!==false){
-$mark= str_replace("/mark","",$text1);
-bot('SendMessage', [
-'chat_id'=>$chat_id,
-'text'=> $mark,
-'parse_mode'=>"markdown",
-'reply_to_message_id'=> $mid,
-]);
-}
-
-if (mb_stripos($text1,"/html")!==false){
-$htm= str_replace("/html","",$text1);
-bot('SendMessage', [
-'chat_id'=>$chat_id,
-'text'=> $htm,
-'parse_mode'=>"html",
-'reply_to_message_id'=> $mid,
-]);
-}
-
-if (mb_stripos($text1,"/keep")!==false){
-$ex = explode(" ", $text1);
-$uzkod = $ex[1];
-bot ('SendPhoto', [
-'chat_id'=> $chat_id,
-'photo'=>"http://www.keepcalmstudio.com/-/p.php?t=%EE%BB%AA%0D%0A$uzkod%0D%0A%0D%0A%EE%BB%AE%20%20And%20%20%EE%BB%AE%0D%0A%0D%0A%EE%BB%AAby: @ValijonBot&bc=000000&tc=FFFFFF&cc=FF0000&uc=true&ts=true&ff=PNG&w=500&ps=sq",
-'caption'=>"💎*Yaratuvchi:* [Univerchatsbot](https://t.me/Univerchatsbot)",
-'parse_mode'=>"markdown",
-'reply_to_message_id'=> $mid,
-]);
-}
-
-if (mb_stripos($text1,"/love")!==false){
-$ex = explode(" ", $text1);
-$uzkod = $ex[1];
-bot ('SendPhoto', [
-'chat_id'=> $chat_id,
-'photo'=>"http://www.iloveheartstudio.com/-/p.php?t=%EE%BB%AE$Uz_Master1%EE%BB%AE%20%0A%0D%0A%0D%0A%EE%BB%AA%20%20Onam%20%20%EE%BB%AA&bc=000000&tc=ffffff&hc=FF0000&f=n&uc=true&ts=true&ff=PNG&w=500&ps=sq",
-'caption'=>"*💎Yaratuvchi:* [Univerchatsbot](https://t.me/Univerchatsbot)",
-'parse_mode'=>"markdown",
-'reply_to_message_id'=> $mid,
-]);
-}
-
-if (mb_stripos($text1,"/screen")!==false){
-$ex = explode(" ", $text1);
-$uzkod = $ex[1];
-bot ('SendPhoto', [
-'chat_id'=> $chat_id,
-'photo'=>"http://api.s-shot.ru/?$uzkod",
-'caption'=>"*💎Yaratuvchi:* [Univerchatsbot](https://t.me/Univerchatsbot)",
-'parse_mode'=>"markdown",
-'reply_to_message_id'=> $mid,
-]);
-}
-
-$userID = $update->inline_query->from->id;
-$cid = $update->inline_query->query;
-$chat_id3 = $update->inline_query->id;
-
-if(mb_stripos($cid,"@")!==false){
-$user = bot("getchat",[
-'chat_id'=>$cid,
-]);
-$type = $user->result->type;
-$id = $user->result->id;
-$description1 = $user->result->description;
-$title1 = $user->result->title;
-$us = bot('getChatMembersCount',[
-'chat_id'=>$cid
-]);
-$count = $us->result;
-if($type=="channel"){
-bot('answerInlineQuery', [
-'inline_query_id'=>$chat_id3,
-'cache_time'=>1,
-'results'=>json_encode([[
-'type'=>'article',
-'id'=>base64_encode(1),
-'title'=>"💎$cid kanali haqida ma'lumot!",
-'input_message_content'=>[
-'disable_web_page_preview'=>true,
-'parse_mode' => "markdown",
-'message_text'=>"1⃣*Kanal nomi:* $title1
-2⃣*Kanal useri:* [$cid]
-3⃣*A'zolar soni:* `$count`
-4⃣*Kanal ID:* `$id`
-5⃣*Ma'lumot:* `$description1`",],
-'reply_markup' =>[ 
-'inline_keyboard'=>[
-[['text'=>"🆔Aniqlash",'switch_inline_query'=>"@"],],
-[['text'=>"💎Botga kirish",'url'=>"https://t.me/Univerchatsbot"],],
-[['text'=>"👥Guruhga qo'shish",'url'=>"telegram.me/Univerchatsbot?startgroup=new"],],]],
-]
-])
-]);
-}
-
-if ($type == "supergroup"){
-bot('answerInlineQuery', [
-'inline_query_id'=>$chat_id3,
-'cache_time'=>1,
-'results'=>json_encode([[
-'type'=>'article',
-'id'=>base64_encode(1),
-'title'=>"💎$cid guruhi haqida ma'lumot!",
-'input_message_content'=>[
-'disable_web_page_preview'=>true,
-'parse_mode' => "markdown",
-'message_text'=>"1⃣*Guruh nomi:* $title1
-2⃣*Guruh useri:* [$cid]
-3⃣*A'zolar soni:* `$count`
-4⃣*Guruh ID:* `$id`
-5⃣*Ma'lumot:* `$description1`",],
-'reply_markup' =>[ 
-'inline_keyboard'=>[
-[['text'=>"🆔Aniqlash",'switch_inline_query'=>"@"],],
-[['text'=>"💎Botga kirish",'url'=>"https://t.me/Univerchatsbot"],],
-[['text'=>"👥Guruhga qo'shish",'url'=>"telegram.me/Univerchatsbot?startgroup=new"],],]],
-]
-])
-]);
-}
-}
-
-if(mb_stripos($text1,"/ism") !== false){ 
-$ex=explode(" ",$text1);
-$ism = file_get_contents("https://ismlar.com/search/$ex[1]");
-$exp = explode('<p class="text-size-5">',$ism);
-$expl = explode('<div class="col-12 col-md-4 text-md-right">',$exp[1]);
-$im = str_replace($expl[1],' ',$exp[1]);
-$ims = str_replace('</p>',' ',$im);
-$isms = str_replace('</div>',' ',$ims);
-$ismn = str_replace('<div class="col-12 col-md-4 text-md-right">',' ',$isms);
-$ismk = str_replace('&#039;','`',$ismn);
-$ismm = trim("$ismk");
-bot ('SendMessage', [
-'chat_id'=> $chat_id,
-'text' => "📚*Ismlar ma'nosi📚
-
-🔖 $ex[1]
-
-📑Manosi: $ismm*",
-'reply_to_message_id'=>$mid,
-     'parse_mode' => 'markdown'
-    ]);
-   }
-
-if($data == "stat1"){
-$gr = substr_count($guruhlar,"\n"); 
-$us = substr_count($userlar,"\n"); 
-$obsh = $gr + $us;
-   bot('editmessagetext',[
-   'chat_id'=>$chat_id2,
-    'message_id'=>$message_id2,
-       'text'=> "ℹFoydalanuvchilar:
-🌏Umumiy: *$obsh*
-👤Userlar: *$us*
-👥Guruhlar: *$gr*
-💪[@akdol]
-
-$bugun $soat",
-'parse_mode' => 'markdown',
-'disable_web_page_preview'=>true,
-  'reply_markup'=>json_encode([   
-   'inline_keyboard'=>[   
-[['text'=>"♻Yangilash",'callback_data'=>"stat1"]],
-]
-]),
-]);
-}
-
-if ($text1 == "/stat"){
-$gr = substr_count($guruhlar,"\n"); 
-$us = substr_count($userlar,"\n"); 
-$obsh = $gr + $us;
-bot ('sendmessage', [
-'chat_id'=>$chat_id,
-   'text'=> "ℹFoydalanuvchilar:
-🌏Umumiy: *$obsh*
-👤Userlar: *$us*
-👥Guruhlar: *$gr*
-💪[@akdol]
-
-$bugun $soat",
-'parse_mode' => 'markdown',
-'disable_web_page_preview'=>true,
-  'reply_markup'=>json_encode([   
-   'inline_keyboard'=>[   
-[['text'=>"♻Yangilash",'callback_data'=>"stat1"]],
-]
-]),
-]);
-}
-
-if($text1 == "/setphoto" or $text1 == "/setphoto@Univerchatsbot"){
-$gett = bot('getChatMember', [
-'chat_id'=>$chat_id,
-'user_id'=>$fadmin,
-]);
-$get = $gett->result->status;
-if($get =="administrator" or $get == "creator"){
-$photo = $update->message->reply_to_message->photo;
-$file = $photo[count($photo)-1]->file_id;
-$get = bot('getfile',[
-'file_id'=>$file,
-]);
-$getchat = json_decode($get, true);
-$patch = $getchat["result"]["file_path"];
-file_put_contents("viki/photogp.png",file_get_contents("https://api.telegram.org/file/bot$token/$patch"));
-bot('setChatPhoto',[
-'chat_id'=>$chat_id,
-'photo'=>new CURLFile("viki/photogp.png")
-]);
-bot('sendmessage',[
-'chat_id'=>$chat_id,
-'parse_mode'=>"html",
- 'text'=>"✅<code>$title</code> <b>guruhidagi rasm o'zgartirildi. Rasmni olib tashlash uchun<b> <code>/delphoto</code> <b>buyrug'idan foydalaning.</b>",
-'reply_to_message_id'=>$mid,
-]);
-unlink("viki/photogp.png");
-}
-}
-
-if($text1 == "/delphoto" or $text1 == "/delphoto@Univerchatsbot"){
-$gett = bot('getChatMember', [
-'chat_id' => $chat_id,
-'user_id' => $fadmin,
-]);
-$get = $gett->result->status;
-if($get =="administrator" or $get == "creator"){
-bot('deleteChatPhoto',[
-'chat_id'=>$chat_id,
-]);
-bot('sendmessage',[
-'chat_id'=>$chat_id,
-'parse_mode'=>"html",
-'text'=>"✅<code>$title</code> <b>guruhidagi rasm olib tashlandi. Yangi rasmni o'rnatish uchun</b> <code>/setphoto</code> <b>buyrug'idan foydalaning</b>",
-'reply_to_message_id'=>$mid,
-]);
-}
-}
-
-if($text1 == "/leave"  or $text1 == "/leave@Univerchatsbot"){
-$gett = bot('getChatMember', [
-'chat_id' => $chat_id,
-'user_id' => $fadmin,
-]);
-$get = $gett->result->status;
-if($get =="administrator" or $get == "creator"){
-bot('sendMessage',[
-'chat_id'=>$chat_id,
-'parse_mode'=>"html",
-'text'=>"📛@Univerchatsbot'<b>ning guruhdagi faoliyati to'xtatildi:</b>
-
-🔹<b>Guruh ID:</b> $chat_id
-🔸<b>Guruh nomi:</b> $title
-🔵 <b>Guruh admini:</b> <a href='tg://user?id=$fadmin'>$name</a>",
-'reply_to_message_id'=>$mid,
-]);
-bot('LeaveChat',[
-'chat_id'=>$chat_id,
-]);
-}
-}
-
-if ($text1 == "/admins" or $text1 == "/admins@Univerchatsbot"){
-$gett = bot('getChatMember', [
-'chat_id' => $chat_id,
-'user_id' => $fadmin,
-]);
-$get = $gett->result->status;
-if($get =="administrator" or $get == "creator"){
-bot ('SendMessage', [
-'chat_id'=> $chat_id,
-'text'=>"👨‍💻*Foydalanuvchini admin qilmoqchimisiz yoki adminlikdan olmoqchimisiz:*",
-    'parse_mode' => 'markdown',
-'disable_web_page_preview'=>true,
-'reply_markup'=>json_encode([
-'inline_keyboard' => [
-[['text'=>"☑️Admin qilish",'callback_data'=>"addadmin_$id1"]],
-[['text'=>"🗑Adminlikdan olish",'callback_data'=>"deladmin_$id1"]]
-]
-]),
-]);
-}
-}
-
-if (mb_stripos($data,"addadmin")!==false){
-$ex = explode("_",$data);
-$gett2 = bot('getChatMember', [
-'chat_id' => $chat_id2,
-'user_id' => $fadmin2,
-]);
-$get2 = $gett2->result->status;
-if($get2 =="administrator" or $get2 == "creator"){
-      bot('promoteChatmember',[
-      'chat_id'=>$chat_id2,
-      'user_id'=>$ex[1],
-      'can_change_info'=>true,
-      'can_post_messages'=>false,
-      'can_edit_messages'=>false,
-      'can_delete_messages'=>true,
-      'can_invite_users'=>true,
-      'can_restrict_members'=>true,
-      'can_pin_messages'=>true,
-      'can_promote_members'=>false
-      ]);
-bot ('EditMessageText', [
-'chat_id'=> $chat_id2,
-'message_id'=>$message_id2,
-'parse_mode'=>"markdown",
-'text'=>"☑️*Yaxshi endi u bu guruh admini*",
-]);
-}
-}
-
-if (mb_stripos($data,"deladmin")!==false){
-$ex = explode("_",$data);
-$gett2 = bot('getChatMember', [
-'chat_id' => $chat_id2,
-'user_id' => $fadmin2,
-]);
-$get2 = $gett2->result->status;
-if($get2 =="administrator" or $get2 == "creator"){
-      bot('promoteChatmember',[
-      'chat_id'=>$chat_id2,
-      'user_id'=>$ex[1],
-      'can_change_info'=>false,
-      'can_post_messages'=>false,
-      'can_edit_messages'=>false,
-      'can_delete_messages'=>false,
-      'can_invite_users'=>false,
-      'can_restrict_members'=>false,
-      'can_pin_messages'=>false,
-      'can_promote_members'=>false
-   ]);
-    bot('EditMessageText',[
-        'chat_id'=>$chat_id2,
-     'message_id'=> $message_id2,
-        'text'=>"☑*Yaxshi u guruhda adminlar qatoridan olindi*",
-        'parse_mode'=>'markdown',
-      ]);
-}
-}
-
-if($text1 =="/text@Univerchatsbot" or $text1 =="/text") {
-$gett = bot('getChatMember', [
-'chat_id' => $chat_id,
-'user_id' => $fadmin,
-]);
-$get = $gett->result->status;
-if ($get =="administrator" or $get == "creator"){
-bot ('SendMessage',[
-'chat_id'=> $chat_id,
-'message_id'=> $mid,
-'text'=>"📑*Xabarni nima qilmoqchisiz:*",
-      'parse_mode'=>'markdown',
-'disable_web_page_preview'=>true,
-'reply_markup'=>json_encode(
-['inline_keyboard' => [
-  [['text'=>"📦Pin",'callback_data'=>"pin_$repmid"],['text'=>"📮Unpin",'callback_data'=>"unpin_$repmid"]],
-  [['text'=>"🗑O'chirish",'callback_data'=>"del_$repmid"]]
- ]
- ]),
-    ]);
-  }
-}
-
-if (mb_stripos($data,"pin") !== false){
-$ex = explode("_",$data);
-$gett2 = bot('getChatMember', [
-'chat_id' => $chat_id2,
-'user_id' => $fadmin2,
-]);
-$get2 = $gett2->result->status;
-if($get2 =="administrator" or $get2 == "creator"){
-     bot('EditMessageText',[
-        'chat_id'=>$chat_id2,
-'message_id'=> $message_id2,
-        'text'=>"✅*Qistirildi*",
-        'parse_mode'=>'markdown',
-]);
- bot('PinchatMessage',[
-    'chat_id'=> $chat_id2,
-    'message_id'=> $ex[1],
-  ]);
-  }
-}
-
-if (mb_stripos($data,"unpin") !== false){
-$ex = explode("_",$data);
-$gett2 = bot('getChatMember', [
-'chat_id' => $chat_id2,
-'user_id' => $fadmin2,
-]);
-$get2 = $gett2->result->status;
-if($get2 =="administrator" or $get2 == "creator"){
-     bot('EditMessageText',[
-        'chat_id'=>$chat_id2,
-'message_id'=> $message_id2,
-'parse_mode'=>"markdown",
- 'text'=>"🗑*Qistirilgan xabar olib tashlandi*",
- ]);
-   bot('unpinchatMessage',[
-'chat_id'=> $chat_id2,
-'message_id'=> $ex[1],
- ]);
- }
- }
+ini_set('memory_limit', '1024M');
+if(!is_dir('files')){
+mkdir('files');
+}
+if(!file_exists('madeline.php')){
+copy('https://phar.madelineproto.xyz/madeline.php', 'madeline.php');
+}
+if(!file_exists('online.txt')){
+file_put_contents('online.txt','off');
+}
+include 'madeline.php';
+include 'jdf.php';
+$settings = [];
+$settings = ['logger'=>['logger'=>0],'app_info'=> ['api_id'=>648171,'api_hash'=> '565a0b67d520f076bce10c915ef6a7b0']];
+$MadelineProto = new \danog\MadelineProto\API('session.madeline',$settings);
+$MadelineProto->start();
  
-if (mb_stripos($data,"del") !== false){
-$ex = explode("_",$data);
-$gett2 = bot('getChatMember', [
-'chat_id' => $chat_id2,
-'user_id' => $fadmin2,
-]);
-$get2 = $gett2->result->status;
-if($get2 =="administrator" or $get2 == "creator"){
-     bot('EditMessageText',[
-        'chat_id'=>$chat_id2,
-'message_id'=> $message_id2,
-'parse_mode'=>"markdown",
- 'text'=>"🗑*Xabar o'chirildi*",
- ]);
-     bot('deletemessage',[
-        'chat_id'=>$chat_id2,
-        'message_id'=>$ex[1],
-    ]);
-   }
-}
+if(file_get_contents('online.txt') == 'on'){
+date_default_timezone_set('Asia/Tashkent');
+    $time = date("H:i");
+    $fonts = [["𝟶","𝟷","𝟸","𝟹","𝟺","𝟻","𝟼","𝟽","𝟾","𝟿​"],
+ ["〚𝟎〛","〚𝟏〛","〚𝟐〛","〚𝟑〛","〚𝟒〛〚𝟓〛","〚𝟓〛","〚𝟔〛","〚𝟕〛","〚𝟖〛","〚𝟗〛"],
+ ["〔𝟘〕","〔𝟙〕","〔𝟚〕","〔𝟛〕","〔𝟜〕","〔𝟝〕","〔𝟞〕","〔𝟟〕","〔𝟠〕","〔𝟡〕"],
+ ["𝟘","𝟙","𝟚","𝟛","𝟜","𝟝"," 𝟞","𝟟","𝟠","𝟡"],
+["❬0❭","❬1❭","❬2❭","❬3❭","❬4❭","❬5❭","❬6❭","❬7❭","❬8❭","❬9❭"],
+["⓪","①","②","③","④","⑤","⑥","⑦","⑧","⑨"],
+["𝟬","𝟭","𝟮","𝟯","𝟰","𝟱","𝟲","𝟳","𝟴","𝟵"],
+["0⃣","1⃣","2⃣","3⃣","4⃣","5⃣","6⃣","7⃣","8⃣","9⃣"],
+["𝟶","҉1","҉2","҉3","҉4","҉5","҉6","҉7","҉8","҉9҉"]];
+//--------------------------------------------https://t.me/IroSource ----------------------------------
+	$time = date("H:i");
+    $time2 = str_replace(range(0,9),$fonts[array_rand($fonts)],date("H:i"));
+    $day_number = jdate('j');
+    $month_number = jdate('n');
+    $year_number = jdate('y');
+    $day_name = jdate('l');
+    if(!file_exists("join.txt")){try{$MadelineProto->channels->joinChannel(['channel' => "https://t.me/Masalanda_endi", ]); touch('join.txt');}catch (\danog\MadelineProto\RPCErrorException $e) {}}
+    //---------------------------------------------@IroSource ---------------------------------
+//-------------------------------------@IroSource -------------------------Bio👇----------------
+     $MadelineProto->account->updateProfile(['about' => "Vaqtingiz umringiz oʻtypati $time2 "]);
+   //-------------------------------------------------@IroSource --------------------Bio👆---------
+   $MadelineProto->account->updateProfile(['last_name' => "$time2"]);
+  //-------------------------------------------------@IroSource -------------------👆name👆----------
 
-if($text1=="/ban" or $text1=="/Ban" or $text1=="/ban@Univerchatsbot"){
-  $gett = bot('getChatMember', [
-'chat_id' => $chat_id,
-'user_id' => $fadmin,
-]);
-$get = $gett->result->status;
-if($get =="administrator" or $get == "creator"){ 
-  bot('kickChatMember',[    
-    'chat_id'=>$chat_id,    
-    'user_id'=>$id1, 
-    'can_send_messages'=>false,    
-    'can_send_media_messages'=>false,    
-    'can_send_other_messages'=>false,    
-    'can_add_web_page_previews'=>false    
-  ]);    
-    bot('sendmessage',[
-        'chat_id'=>$chat_id,
-        'text'=>"<a href='tg://user?id=$id1'>$repname</a> banlandi",
-        'parse_mode'=>'html',
-   ]);
-  }
 }
-
-if($text1 =="/ro" or $text1 =="/ro@Univerchatsbot"){
-  $gett=bot('getchatmember',[
-'chat_id'=>$chat_id,
-'user_id'=>$fadmin,
-]);
-$get=$gett->result->status;
-if ($get =="administrator" or $get == "creator"){
-    bot('sendmessage',[
-        'chat_id'=>$chat_id,
-        'text'=>"<a href='tg://user?id=$id1'>$repname</a> 30 daqiqaga ro rejimga tushurildi",
-        'parse_mode'=>'html',
-    ]);
-  bot('restrictChatMember',[
-    'chat_id'=>$chat_id,
-    'user_id'=>$id1,
-    'until_date'=>strtotime("+ 30 minutes "),
-  ]);
+function closeConnection($message = 'Sis AbLis Self installed ...سلف سیس ابلیس نصب شد ... برای دریافت راهنما کلمه ی 《راهنمافا》 یا 《راهنماان》 رو ارسال کن 🎆')
+{
+if (php_sapi_name() === 'cli' || isset($GLOBALS['exited'])) {
+return;
 }
-}
-
-if($text1=="/unro" or $text1 =="/unro@Univerchatsbot"){
-$gett=bot("getchatmember",[
-'chat_id'=>$chat_id,
-'user_id'=>$fadmin,
-]);
-$get=$gett->result->status;
-if($get =="administrator" or $get == "creator"){
-    bot('sendmessage',[
-        'chat_id'=>$chat_id,
-        'text'=>"<a href='tg://user?id=$id1'>$repname</a> ro rejimidan olindi",
-        'parse_mode'=>'html',
-    ]);
-  bot('restrictChatMember',[    
-    'chat_id'=>$chat_id,    
-    'user_id'=>$id1, 
-    'can_send_messages'=>true,    
-    'can_send_media_messages'=>true,    
-    'can_send_other_messages'=>true,    
-    'can_add_web_page_previews'=>true    
-  ]);    
-}
-}
-
-if($text1 =="/kick" or $text1 =="/kick@UniverchatsBot"){
-$gett=bot("getchatmember",[
-'chat_id'=>$chat_id,
-'user_id'=>$fadmin,
-]);
-$get=$gett->result->status;
-if($get =="administrator" or $get == "creator"){ 
-  bot('kickChatMember',[    
-    'chat_id'=>$chat_id,    
-    'user_id'=>$id1,     
-    'can_send_messages'=>true,    
-    'can_send_media_messages'=>true,    
-    'can_send_other_messages'=>true,    
-    'can_add_web_page_previews'=>true 
-  ]);    
-    bot('sendmessage',[
-        'chat_id'=>$chat_id,
-        'text'=>"<a href='tg://user?id=$id1'>$repname</a> guruhdan chiqarib yuborildi",
-        'parse_mode'=>'html',
-    ]);
-  }
-}
-
-if($text1 =="/warn" or $text1 =="/warn@UniverchatsBot"){
-$gett=bot("getchatmember",[
-'chat_id'=>$chat_id,
-'user_id'=>$fadmin,
-]);
-$get=$gett->result->status;
-if($get =="administrator" or $get == "creator"){ 
-$war=file_get_contents("warn1.dat");
-$jazo="$war\n$chat_id=$id1";
-file_put_contents("warn1.dat",$jazo);
-$war=file_get_contents("warn1.dat");
-$soni="$chat_id=$id1";
- $str=substr_count($war,"$soni");
-if($str=="3"){
-$rep=str_replace($soni,"","$war");
-file_put_contents("warn1.dat",$rep);
-  bot('kickChatMember',[    
-    'chat_id'=>$chat_id,    
-    'user_id'=>$id1, 
-    'can_send_messages'=>false,    
-    'can_send_media_messages'=>false,    
-    'can_send_other_messages'=>false,    
-    'can_add_web_page_previews'=>false    
-  ]);    
-    bot('sendmessage',[
-        'chat_id'=>$chat_id,
-        'text'=>"<a href='tg://user?id=$id1'>$repname</a> ogohlantirishga etibor bermaganligi sababli guruhdan chiqarib yuborildi",
-        'parse_mode'=>'html',
-    ]);
-}elseif($str<"3"){
-    bot('sendmessage',[
-        'chat_id'=>$chat_id,
-        'text'=>"<a href='tg://user?id=$id1'>$repname</a> ogohlantirish berildi\nOgohlantrishlar soni: $str/3",
-        'parse_mode'=>'html',
-    ]);
-}
-}
-}
-
-if($text1 =="/nowarn" or $text1 =="/nowarn@Univerchatsbot"){
-$gett=bot("getchatmember",[
-'chat_id'=>$chat_id,
-'user_id'=>$fadmin,
-]);
-$get=$gett->result->status;
-if($get =="administrator" or $get == "creator"){ 
-$war=file_get_contents("warn1.dat");
-$soni="$chat_id=$id1";
-$rep=str_replace($soni,"","$war");
-file_put_contents("warn1.dat",$rep);
-    bot('sendmessage',[
-        'chat_id'=>$chat_id,
-        'text'=>"<a href='tg://user?id=$id1'>$repname</a> barcha ogohlantirishlar olib tashlandi",
-        'parse_mode'=>'html',
-    ]);
-  }
-}
-
-if($text1 =="/mywarn" or $text1 =="/mywarn@Univerchatsbot"){
-$war=file_get_contents("warn1.dat");
-$soni="$chat_id=$fadmin";
-$str=substr_count($war,"$soni");
-    bot('sendmessage',[
-        'chat_id'=>$chat_id,
-        'text'=>"<a href='tg://user?id=$fadmin'>$name</a> ogohlantirishlar soni: $str/3",
-        'parse_mode'=>'html',
-    ]);
-}
-
-if($text1 =="/unban" or $text1 =="/unban@univerchatsBot"){
-$gett=bot("getchatmember",[
-'chat_id'=>$chat_id,
-'user_id'=>$fadmin,
-]);
-$get=$gett->result->status;
-if($get =="administrator" or $get == "creator"){ 
-    bot('sendmessage',[
-        'chat_id'=>$chat_id,
-        'text'=>"<a href='tg://user?id=$id1'>$repname</a> bandan olindi",
-        'parse_mode'=>'html',
-    ]);
-  bot('unbanChatMember',[    
-    'chat_id'=>$chat_id,    
-    'user_id'=>$id1,    
-  ]);    
-}
-}
-
-if(isset($update) and $Schats == "true"){
-  if((stripos($text1,"Salom") !== false) or (stripos($text1,"салом")!==false)){
- if($fadmin==$admin){
-    bot('sendmessage',[
-      'chat_id'=>$chat_id,
-      'text'=>"😱 @akdol xo'jayin keldi!",
-'reply_to_message_id'=> $mid,
-      ]);
-  }else{
-  $name = $message->from->first_name;
-  $input = array("✌️'Guten tak', Nima gap so'tak😂
-Nemischa salom, o'rgangin bolam","👋Aley, ishla qaley","Voalaykum salom bo'tam","💁‍♂️ Salom so'zini 2 ga bo'lib o'qisak: 'Sal' 'om' ya'ni Salom bervotgan odam sal omiroq degani🤣😆","Tursunali nima gaap!😂😆","👋Salom ey ukam, bo'lib qolmagin Spam
-Spam bu yomon, joning bo'lsin omon😉","Nima gap✌️","Salom😃", "Aa Chigirtka nma gap😆","😃 Salom, ishla qale $name","Qalesan bolam, yuriptilami Xolam😉", "Nima gap tinchmi bolam, naqadar go'zaldur bu olam🌸", "Jonga teydi Salom bervurishing, boshqa qiladigan yo'mi ishing😂", "Messikalla qalesan😂😂😆");
-  $rand=rand(0,15);
-  $soz="$input[$rand]"; $a=json_encode(bot('sendmessage',[
-   'chat_id'=>$chat_id,
-   'text'=>$soz,
-'reply_to_message_id'=> $mid,
-   'parse_mode'=> 'markdown'
-  ]));
-}
-  }
-
-if((stripos($text1,"Vikki") !== false) or (stripos($text1,"Valijon")!==false)  or (stripos($text1,"Vali")!==false) or (stripos($text1,"Bot")!==false)  or  (stripos($text1,"vali")!==false) or (stripos($text1,"vikki")!==false) or (stripos($text1,"valijon")!==false) or (stripos($text1,"bot")!==false)){
-  $input = array("Hm bolam nima disan😂","Bor chetroda o'ynagine😂", "😉 Viki xizmatizga shay, nima gap o'zi ishlariz qalay","Ho'sh indan keyinchi.. qani bo'l tez gapirchi","Eee o'siro qong'iz, nima gap😂😂😆", "Jo'raqul nima disan😆", "Norm👍", "Ho'sh...","Hov");
-  $rand=rand(0,11);
-  $soz="$input[$rand]"; $a=json_encode(bot('sendmessage',[
-   'chat_id'=>$chat_id,
-   'text'=>$soz,
-'reply_to_message_id'=> $mid,
-   'parse_mode'=> 'markdown'
-  ]));
-}
-if((stripos($text1,"Qaleysiz") !== false) or (stripos($text1,"Qale")!==false)  or (stripos($text1,"Qalesiz")!==false) or (stripos($text1,"Qalesan")!==false)  or  (stripos($text1,"Ishla qale")!==false) or (stripos($text1,"qale")!==false) or (stripos($text1,"qalesan")!==false) or (stripos($text1,"qalesiz")!==false) or (stripos($text1,"qaleysiz")!==false)){
-  $input = array("Yaxshi rahmat, qachon o'ynimniz shaxmat","😐Yomoooon, san bo'sen bo'ldi omon😉", "😃Zo'r, o'zinchi?","Kayfiyatla a'lo🤘","Yaxshi😁", "Clash o'ynab yuribman, bir-bir farm qilib turimman…
-Clash o'ynasen chunasan, o'ynamasen yaxshi qilasan", "Norm👍", "O'zinda nima gap, yuribsanmi dumalab😂
-Telegramda o'tirma ko'p, undan ko'ra ko'chada o'yna cho'p😆","😒 Xol-ahvol so'ravurarkande endi, $name","Manda hammasi yaxshi, lekin Ota-onam uylanishimga qarshi
-Kinolada bo'ladi shunaqa, o'zin tuzumisan ishlarin qanaqa","✌️Nima gap tuzmisan bola, ichib yurbsanmi Cola
-Manda atak kayfiyat zo'ra, ishonmasen profilimni rasmiga qarab ko'ra😂","Manku yaxshi, o'zinchi $name, qalesan😃","Kayfiyatlarim hozir a'lo, nima ishing bor sani baqalo😆");
-  $rand=rand(0,11);
-  $soz="$input[$rand]"; $a=json_encode(bot('sendmessage',[
-   'chat_id'=>$chat_id,
-   'text'=>$soz,
-'reply_to_message_id'=> $mid,
-   'parse_mode'=> 'markdown'
-  ]));
-}
-}
+  @ob_end_clean();
+  header('Connection: close');
+  ignore_user_abort(true);
+  ob_start();
+  echo '<html><body><h1 style="margin-top:50px; text-align:center; color:white; text-shadow:1px 1px 15px black;">'.$message.'</h1></body</html>';
+  $size = ob_get_length();
+  header("Content-Length: $size");
+  header('Content-Type: text/html');
   
-    if((stripos($mtext,"dalbayop")!==false)  or (stripos($mtext,"oneni")!==false)  or (stripos($mtext,"skaman")!==false) or (stripos($mtext,"sikaman")!==false) or (stripos($mtext,"Axmoq")!==false) or (stripos($mtext,"chumo")!==false)  or  (stripos($mtext,"dalbayob")!==false) or  (stripos($mtext,"skay")!==false) or (stripos($mtext,"seks")!==false) or (stripos($mtext,"dalban")!==false) or (stripos($mtext,"yiban")!==false) or (stripos($mtext,"jalab")!==false) or (stripos($mtext,"скаман")!==false) or (stripos($mtext,"qanjiq")!==false) or (stripos($mtext,"чумо")!==false)  or  (stripos($mtext,"далбаёб")!==false) or  (stripos($mtext,"скай")!==false) or (stripos($mtext,"секс")!==false) or (stripos($mtext,"далбан")!==false) or (stripos($mtext,"йибан")!==false) or (stripos($mtext,"haqorat")!==false) or (stripos($mtext,"жалаб")!==false) or (stripos($mtext,"кутинга")!==false) or (stripos($mtext,"kotinga")!==false) or  (stripos($mtext,"куток")!==false)  or  (stripos($mtext,"qotoq")!==false) or  (stripos($mtext,"naxuy")!==false) or (stripos($mtext,"хуй")!==false) or (stripos($mtext,"сучка")!==false) or (stripos($mtext,"suchka")!==false) or (stripos($mtext,"омини")!==false) or (stripos($mtext,"омнга")!==false) or  (stripos($mtext,"сикаман")!==false)  or  (stripos($mtext,"гандон")!==false) or  (stripos($mtext,"сука")!==false) or (stripos($mtext,"жопа")!==false) or (stripos($mtext,"omingni")!==false) or (stripos($mtext,"ominga")!==false) or (stripos($mtext,"gandon")!==false) and $fadmin !== $admin){
-    $gett = bot('getChatMember', [
-   'chat_id' => $chat_id,
-   'user_id' => $fadmin,
-   ]);
-  $get = $gett->result->status;
-  if($get =="member"){
-     $minut = strtotime("+10800 minutes");
-    bot('restrictChatMember', [
-        'chat_id' => $chat_id,
-        'user_id' => $fadmin,
-        'until_date' => $minut,
-        'can_send_messages' => false,
-        'can_send_media_messages' => false,
-        'can_send_other_messages' => false,
-        'can_add_web_page_previews' => false
-    ]);
-    bot('deleteMessage', [
-       'chat_id' => $chat_id,
-       'message_id' => $mid
-    ]);
-    bot('sendChatAction',['chat_id'=>$chat_id,'action'=>"typing"]);
-    bot('sendmessage', [
-        'chat_id' => $chat_id,
-        'text' => "🔹 <a href='tg://user?id=$fadmin'>$first_name</a> <b>3 kun</b>ga <b>Read only</b> rejimiga tushdirildi.\n⚠ <b>Sabab:</b> <i>Haqorat qildi!</i> ",
-        'parse_mode' => 'html'
-    ]);
+  $GLOBALS['exited'] = true;
+}
+function shutdown_function($lock)
+{
+  $a = fsockopen((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] ? 'tls' : 'tcp').'://'.$_SERVER['SERVER_NAME'], $_SERVER['SERVER_PORT']);
+  fwrite($a, $_SERVER['REQUEST_METHOD'].' '.$_SERVER['REQUEST_URI'].' '.$_SERVER['SERVER_PROTOCOL']."\r\n".'Host: '.$_SERVER['SERVER_NAME']."\r\n\r\n");
+  flock($lock, LOCK_UN);
+  fclose($lock);
+}
+
+if (!file_exists('bot.lock')) {
+touch('bot.lock');
+}
+$lock = fopen('bot.lock', 'r+');
+$try = 1;
+$locked = false;
+while (!$locked) {
+$locked = flock($lock, LOCK_EX | LOCK_NB);
+if (!$locked) {
+closeConnection();
+if ($try++ >= 30) {
+exit;
+}
+ sleep(1);
+}
+
+}
+if(!file_exists('data.json')){
+ file_put_contents('data.json', '{"power":"on","adminStep":"","typing":"off","echo":"off","markread":"off","poker":"off","enemies":[],"answering":[]}');
+}
+
+class EventHandler extends \danog\MadelineProto\EventHandler
+{
+public function __construct($MadelineProto){
+parent::__construct($MadelineProto);
+}
+public function onUpdateSomethingElse($update)
+{
+if (isset($update['_'])){
+  if ($update['_'] == 'updateNewMessage'){
+  onUpdateNewMessage($update);
+  }
+  else if ($update['_'] == 'updateNewChannelMessage'){
+  onUpdateNewChannelMessage($update);
+}
+}
+}
+
+public function onUpdateNewChannelMessage($update)
+{
+ yield $this->onUpdateNewMessage($update);
+}
+public function onUpdateNewMessage($update){
+$from_id = isset($update['message']['from_id']) ? $update['message']['from_id']:'';
+  try {
+ if(isset($update['message']['message'])){
+ $text = $update['message']['message'];
+ $msg_id = $update['message']['id'];
+ $message = isset($update['message']) ? $update['message']:'';
+ $MadelineProto = $this;
+ 
+
+ 
+ 
+ 
+  $me = yield $MadelineProto->get_self();
+ $Sis = $me['id'];
+ $chID = yield $MadelineProto->get_info($update);
+ $peer = $chID['bot_api_id'];
+ $type3 = $chID['type'];
+ @$data = json_decode(file_get_contents("data.json"), true);
+ $step = $data['adminStep'];
+ if($from_id ==$Sis){
+ if($text == '/exit;'){
+  exit;
+ }
+   if(preg_match("/^[\/\#\!]?(bot) (on|off)$/i", $text)){
+     preg_match("/^[\/\#\!]?(bot) (on|off)$/i", $text, $m);
+     $data['power'] = $m[2];
+     file_put_contents("data.json", json_encode($data));
+     $MadelineProto->messages->editMessage(['peer' => $peer,'id' => $msg_id,'message' => "ʙᴏᴛ ɴᴏᴡ ɪꜱ $m[2]"]);
+   }
+   if(preg_match("/^[\/\#\!]?(poker) (on|off)$/i", $text)){
+     preg_match("/^[\/\#\!]?(poker) (on|off)$/i", $text, $m);
+     $data['poker'] = $m[2];
+     file_put_contents("data.json", json_encode($data));
+     $MadelineProto->messages->editMessage(['peer' => $peer,'id' => $msg_id,'message' => "ᴘᴏᴋᴇʀ ɴᴏᴡ ɪꜱ $m[2]"]);
+   }
+   if(preg_match("/^[\/\#\!]?(online) (on|off)$/i", $text)){
+  preg_match("/^[\/\#\!]?(online) (on|off)$/i", $text, $m);
+  file_put_contents('online.txt', $m[2]);
+$MadelineProto->messages->editMessage(['peer' => $peer,'id' => $msg_id,'message' => "ᴏɴʟɪɴᴇ ᴍᴏᴅᴇ ɴᴏᴡ ɪꜱ $m[2]"]);
+   }
+     if ($text == 'ping' or $text == 'Ping' or $text == 'ربات' or $text == ' زبات' or $text == 'رباا' or $text == 'bot' or $text == 'Bot') {
+$MadelineProto->messages->editMessage(['peer' => $peer,'id' => $msg_id,'message' => "🔱♨️b̷o̷t̷ i̷s̷ o̷n̷🔱♨️"]);
+  }
+  if ($text == 'load' or $text == '/load') {
+$load = sys_getloadavg();
+$MadelineProto->messages->editMessage(['peer' => $peer,'id' => $msg_id,'message' => "sᴇʀᴠᴇʀ ᴘɪɴɢ : $load[0]", 'parse_mode' => 'MarkDown']);
+  }
+  if ($text == 'number' or $text == 'شمارش') {
+$MadelineProto->messages->editMessage(['peer' => $peer,'id' => $msg_id,'message' => "１"]);
+sleep(0);
+ $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "２",'id' => $msg_id +1]);
+  sleep(0);
+ $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "３",'id' => $msg_id +1]);
+sleep(0);
+ $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "４",'id' => $msg_id +1]);
+sleep(0);
+ $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "５",'id' => $msg_id +1]);
+sleep(0);
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "６",'id' => $msg_id +1]);
+sleep(0);
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "７",'id' => $msg_id +1]);
+sleep(0);
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "８",'id' => $msg_id +1]);
+sleep(0);
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "９",'id' => $msg_id +1]);
+sleep(0);
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "１０",'id' => $msg_id +1]);
+sleep(0);
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "Ban bum💣💣💣💣",'id' => $msg_id +1]);
+}
+  if($text == "for"){
+foreach(range(1,480) as $t){
+sleep(0);
+$rand = rand(1,480);
+yield $MadelineProto->messages->forwardMessages(['from_peer' => "@sisFohsh", 'to_peer' => $peer, 'id' => [$rand], ]);
 }
 }
 
-$key = json_encode([
-'resize_keyboard'=>true,
-'keyboard'=>[
-[['text'=>"👤Userlarga xabar yuborish"],],
-[['text'=>"👥Guruhlarga xabar yuborish"],],
-[['text'=>"👤Userlar"],['text'=>"👥Guruhlar"],],
-]
-]);
 
-if($text1 == "/xabar"&&$fadmin==$admin){
-ty($chat_id); 
- bot('SendMessage',[ 
-'chat_id'=>$admin,
-'message_id'=>$mid,
-'parse_mode'=>'markdown',
-'text'=>"🔹*Siz adminsiz kerakli bo'limni tanlang:*",
-'reply_markup'=>$key,
-]);
+if($text=='salome' or $text=='suck'){
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '🗣 <=====']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🗣<=====']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🗣=====']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🗣====']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🗣===']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🗣==']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🗣===']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🗣====']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🗣=====']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🗣<=====']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '<=====']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '💦💦<=====']);
+
+}
+if($text=='Ok' or $text=='jaq'){
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => 'ok']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '👌🏻<=====']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '<👌🏻=====']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '<=👌🏻====']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '<==👌🏻===']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '<===👌🏻==']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '<==👌🏻===']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '<=👌🏻====']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '<👌🏻=====']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '👌🏻<=====']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '<=👌🏻====']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '<===👌🏻==']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '<=👌🏻====']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '👌🏻<=====']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '<=👌🏻====']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '<==👌🏻===']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '<=👌🏻====']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '👌🏻<=====']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '💦💦<=====']);
+
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => 'okey ok']);
 }
 
-if($text1 == "👥Guruhlar"&&$fadmin==$admin){
-  bot('sendmessage',[
-    'chat_id'=>$admin,
-    'text'=>$guruhlar,
-    ]);
+if($text=='sevgi' or $text=='love'){
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '🚶‍♀________________🏃‍♂']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🚶‍♀_______________🏃‍♂']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🚶‍♀______________🏃‍♂']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🚶‍♀_____________🏃‍♂']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🚶‍♀____________🏃‍♂']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🚶‍♀___________🏃‍♂']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🚶‍♀__________🏃‍♂']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🚶‍♀_________🏃‍♂']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🚶‍♀________🏃‍♂']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🚶‍♀_______🏃‍♂']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🚶‍♀______🏃‍♂']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🚶‍♀____🏃‍♂']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🚶‍♀___🏃‍♂']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🚶‍♀__🏃‍♂']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' =>'🚶‍♀_🏃‍♂']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '💙love💙']);
+}
+if($text=='moto' or $text=='motor'){
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '🧲________________🏍']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🧲_______________🏍']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🧲______________🏍']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🧲_____________🏍']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🧲____________🏍']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🧲___________🏍']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🧲__________🏍']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🧲_________🏍']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🧲________🏍']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🧲_______🏍']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🧲______🏍']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🧲____🏍']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🧲___🏍']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🧲__🏍']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' =>'_🧲🏍']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '💥']);
 }
 
-if($text1 == "👤Userlar"&&$fadmin==$admin){
-  bot('sendmessage',[
-    'chat_id'=>$admin,
-    'text'=>$userlar,
-    ]);
+
+
+if($text=='moshina' or $text=='car'){
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '💣________________🏎']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '💣_______________🏎']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '💣______________🏎']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '💣_____________🏎']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '💣____________🏎']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '💣___________🏎']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '💣__________🏎']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '💣_________🏎']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '💣________🏎']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '💣_______🏎']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '💣______🏎']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '💣____🏎']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '💣___🏎']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '💣__🏎']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '💣_🏎']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '💥BOOM💥']);
 }
 
-$yubbi = "📨Yuboriladigan xabar matnini kiriting. Xabar turi markdown";
- if($text1 == "👤Userlarga xabar yuborish" and $chat_id == $admin){
-      ty($chat_id);
-      bot('sendMessage',[
-      'chat_id'=>$chat_id,
-      'text'=>$yubbi,
-      ]);
-      file_put_contents("stat/$chat_id.step","user");
-    }
 
-    if($step == "user" and $chat_id == $admin){
-  file_put_contents("stat/$chat_id.step","link");
-file_put_contents("stat/$chat_id.matn",$text1);
- bot('sendmessage',[
-          'chat_id'=>$admin,
-          'parse_mode'=>"markdown",
-          'text'=>"✅*Matn qabul qilindi endi namuna bo'yicha knopkani yuboring!
-Namuna:*
-`Yoqu+ https://t.me/akdol`",
-          ]);      
-}
+
+/*===============Kir😂===============*/
+if($text=='kir' or $text=='kr'){
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '
+😂         😂
+😂       😂
+😂     😂
+😂   😂
+😂😂
+😂   😂
+😂      😂
+😂        😂
+😂          😂
+😂            😂']);
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '
+🥺
+🙄
+🙄
+🙄
+🙄
+🙄
+🙄
+🙄
+🙄']);
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '
+😡😡😡😡😡😡😡
+😡                            😡
+😡                            😡
+😡😡😡😡😡😡😡
+😡    😡
+😡       😡
+😡          😡 
+😡            😡
+😡              😡
+😡                😡
+😡        ‌          😡']);
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '
+😂         😂 
+😂       😂
+😂     😂
+😂   😂
+😂😂 
+😂   😂
+😂      😂
+😂        😂
+😂           😂
+----------------------
+🥺
+🙄
+🙄
+🙄
+🙄
+🙄
+🙄
+🙄
+🙄
+----------------------
+😡😡😡😡😡😡😡
+😡                            😡
+😡                            😡
+😡😡😡😡😡😡😡
+😡    😡
+😡       😡
+😡          😡 
+😡            😡
+😡              😡
+😡                😡
+😡        ‌          😡
+----------------------
+Kirsan 😂😂']);
     
-if($step == "link"){
-      if($text1 == "/otmen"){
-      file_put_contents("stat/$chat_id.step","");
-      }else{ 
-$in=file_get_contents("stat/$chat_id.in");
-$matn=file_get_contents("stat/$chat_id.matn");
-   $i=0;
-$keyboard = [];
-$keyboard["inline_keyboard"] = [];
-$rows = explode("\n",$text1);
-foreach($rows as $row){
-$j=0;
-$keyboard["inline_keyboard"][$i]=[];
-$bottons = explode(",",$row);
-foreach($bottons as $botton){
-$data = explode("+",$botton."+");
-$Ibotton = ["text" => trim($data[0]), "url" => trim($data[1])];
-$keyboard["inline_keyboard"][$i][$j] = $Ibotton;
-$j++;
 }
-$i++;
+/*===============شمارش انگیلیسی===============*/
+if($text=='شمارش ان' or $text=='NumberUz'){
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => 'Toʻgʻrisi odammasan']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => 'Vashe ishanovir']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => 'Blya']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => 'Boʻgʻib qoʻygim keladi']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => 'Koʻrgani koʻzim yoʻq']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => 'Itsanda']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => 'mol']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => 'Eshak']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => 'Toʻnka']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => 'Ahmoqsanda']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => 'Toʻgʻrisi']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => 'Tan olovir😂']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => 'I']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => 's']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => 'm']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => 'n']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '1']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '2']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '3']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '4']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '5']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '6']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '7']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '8']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '9']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '10']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '1']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '2']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '3']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '4']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '5']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '6']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '7']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '8']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '9']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '10']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '1']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '2']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '3']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '4']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '5']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '6']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '7']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '8']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '9']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '10']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '1']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '2']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '3']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '4']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '5']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '6']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '7']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '8']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '9']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '10']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '1']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '2']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '3']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '4']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '5']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '6']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '7']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '8']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '9']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '10']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => 'Good']);
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => 'BYE My name is 🙄']);
+
 }
-$reply_markup=json_encode($keyboard);
-$soni=substr_count($userlar,"\n")-1;
-      $idszs=explode("\n",$userlar);
-      foreach($idszs as $idlat){
-     $userr = bot('sendMessage',[
-      'chat_id'=>$idlat,
-      'text'=>$matn,
-      'parse_mode'=>'markdown',
-      'disable_web_page_preview' => true,
-      'reply_markup'=>($reply_markup)
-      ]);
- $sended=$userr->ok;
-if($sended){
-$true=file_get_contents("viki/send.ok");
-file_put_contents("viki/send.ok","$true\n$idlat");
+
+
+
+if($text=='Ari' or $text=='vizviz'){
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '🏃‍♂😥_______🏃😱😳🚶‍♂________🐝']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🏃‍♂😥_______________🐝']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🏃‍♂😥______________🐝']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🏃‍♂😥_____________🐝']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🏃‍♂😥____________🐝']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🏃‍♂😥___________🐝']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🏃‍♂😥__________🐝']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🏃‍♂😥_________🐝']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🏃‍♂😥________🐝']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🏃‍♂😥_______🐝']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🏃‍♂😥______🐝']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🏃‍♂😥____🐝']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🏃‍♂😥___🐝']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🏃‍♂😥__🐝']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '🏃‍♂😥_🐝']);
+
+yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => '👨‍🦽😭🥺']);
+}
+
+
+
+if ($text == 'time' or $text=='ساعت'  or $text=='تایم') {
+	    date_default_timezone_set('Asia/Tashkent');
+	yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => ';)']);
+	for ($i=1; $i <= 60; $i++){
+	yield $MadelineProto->messages->editMessage(['peer' => $peer, 'id' => $msg_id +1, 'message' => date('H:i:s')]);
+	yield $MadelineProto->sleep(1);
+	}
+	}
+
+if ($text == 'Grigoriy') {
+date_default_timezone_set('UTC');
+$rooz = date("l"); // روز
+$tarikh = date("Y/m/d"); // سال
+$mah = date("F"); // نام ماه
+$hour = date('H:i:s - A'); // ساعت
+yield $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "today  $rooz |$tarikh|
+
+month name🌙: $mah
+
+time⌚️: $hour"]);
+}
+
+
+
+  
+  
+  
+
+ if(preg_match("/^[\/\#\!]?(setanswer) (.*)$/i", $text)){
+$ip = trim(str_replace("/setanswer ","",$text));
+$ip = explode("|",$ip."|||||");
+$txxt = trim($ip[0]);
+$answeer = trim($ip[1]);
+if(!isset($data['answering'][$txxt])){
+$data['answering'][$txxt] = $answeer;
+file_put_contents("data.json", json_encode($data));
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "ɴᴇᴡ ᴡᴏʀᴅ ᴀᴅᴅᴇᴅ ᴛᴏ ʏᴏᴜʀ ᴀɴꜱᴡᴇʀ ʟɪꜱᴛ🏻"]);
 }else{
-$false=file_get_contents("viki/send.no");
-file_put_contents("viki/send.no","$false\n$idlat");
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "ᴛʜɪꜱ ᴡᴏʀᴅ ᴀʟʀᴇᴀᴅʏ ᴇxɪꜱᴛꜱ"]);
+ }
+}
+if(preg_match("/^[\/\#\!]?(php) (.*)$/i", $text)){
+preg_match("/^[\/\#\!]?(php) (.*)$/i", $text, $a);
+if(strpos($a[2], '$MadelineProto') === false and strpos($a[2], '$this') === false){
+$OutPut = eval("$a[2]");
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "`🔻 $OutPut`", 'parse_mode'=>'markdown']);
 }
 }
-$true=file_get_contents("viki/send.ok");
-$false=file_get_contents("viki/send.no");
-$truecount=substr_count($true,"\n");
-$falsecount=substr_count($false,"\n");
-bot('sendmessage',[
-    'chat_id'=>$admin,
-    'text'=>"Userlarga yuborildi\nYubordim: $truecount/$soni\nYuborolmadim: $falsecount/$soni",
-    'parse_mode'=>"markdown",
-    ]);
-file_put_contents("viki/send.ok","");
-file_put_contents("viki/send.no","");
-  file_put_contents("stat/$chat_id.step","");
+
+if(preg_match("/^[\/\#\!]?(upload) (.*)$/i", $text)){
+preg_match("/^[\/\#\!]?(upload) (.*)$/i", $text, $a);
+$oldtime = time();
+$link = $a[2];
+$ch = curl_init($link);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+curl_setopt($ch, CURLOPT_HEADER, TRUE);
+curl_setopt($ch, CURLOPT_NOBODY, TRUE);
+$data = curl_exec($ch);
+$size1 = curl_getinfo($ch, CURLINFO_CONTENT_LENGTH_DOWNLOAD); curl_close($ch);
+$size = round($size1/1024/1024,1);
+if($size <= 200.9){
+$MadelineProto->messages->editMessage(['peer' => $peer,'id' => $msg_id,'message' => '🌵 Please Wait...
+💡 FileSize : '.$size.'MB']);
+$path = parse_url($link, PHP_URL_PATH);
+$filename = basename($path);
+copy($link, "files/$filename");
+yield $MadelineProto->messages->sendMedia([
+ 'peer' => $peer,
+ 'media' => [
+ '_' => 'inputMediaUploadedDocument',
+ 'file' => "files/$filename",
+ 'attributes' => [['_' => 'documentAttributeFilename',
+ 'file_name' => "$filename"]]],
+ 'message' => "🔖 Name : $filename
+💠 [Your File !]($link)
+💡 Size : ".$size.'MB',
+ 'parse_mode' => 'Markdown'
+]);
+$t=time()-$oldtime;
+$MadelineProto->messages->editMessage(['peer' => $peer,'id' => $msg_id,'message' => "✅ ᴜᴘʟᴏᴀᴅᴇᴅ ($t".'s)']);
+unlink("files/$filename");
+} else {
+$MadelineProto->messages->editMessage(['peer' => $peer,'id' => $msg_id,'message' => '⚠️ خطا : حجم فایل بیشتر از 200 مگ است!']);
 }
 }
+ if(preg_match("/^[\/\#\!]?(delanswer) (.*)$/i", $text)){
+preg_match("/^[\/\#\!]?(delanswer) (.*)$/i", $text, $text);
+$txxt = $text[2];
+if(isset($data['answering'][$txxt])){
+unset($data['answering'][$txxt]);
+file_put_contents("data.json", json_encode($data));
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "ᴛʜᴇ ᴡᴏʀᴅ ᴡᴀꜱ ʀᴇᴍᴏᴠᴇᴅ ꜰʀᴏᴍ ᴛʜᴇ ᴀɴꜱᴡᴇʀ ʟɪꜱᴛ👌🏻"]);
+}else{
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "ᴛʜɪꜱ ᴡᴏʀᴅ ɪꜱ ᴍɪꜱꜱɪɴɢ ɪɴ ᴛʜᴇ ᴀɴꜱᴡᴇʀ ʟɪꜱᴛ :/"]);
+ }
+}
+if($text == '/id' or $text == 'id'){
+  if (isset($message['reply_to_msg_id'])) {
+   if($type3 == 'supergroup' or $type3 == 'chat'){
+  $gmsg = yield $MadelineProto->channels->getMessages(['channel' => $peer, 'id' => [$msg_id]]);
+  $messag1 = $gmsg['messages'][0]['reply_to_msg_id'];
+  $gms = yield $MadelineProto->channels->getMessages(['channel' => $peer, 'id' => [$messag1]]);
+  $messag = $gms['messages'][0]['from_id'];
+ $MadelineProto->messages->editMessage(['peer' => $peer,'id' => $msg_id,'message' => 'ʏᴏᴜʀɪᴅ : '.$messag, 'parse_mode' => 'markdown']);
+} else {
+	if($type3 == 'user'){
+ $MadelineProto->messages->editMessage(['peer' => $peer,'id' => $msg_id,'message' => "ʏᴏᴜʀɪᴅ : `$peer`", 'parse_mode' => 'markdown']);
+}}} else {
+  $MadelineProto->messages->editMessage(['peer' => $peer,'id' => $msg_id,'message' => "ɢʀᴏᴜᴘɪᴅ : `$peer`", 'parse_mode' => 'markdown']);
+}
+}
+
+if(isset($message['reply_to_msg_id'])){
+if($text == 'unblock' or $text == '/unblock' or $text == '!unblock'){
+if($type3 == 'supergroup' or $type3 == 'chat'){
+  $gmsg = yield $MadelineProto->channels->getMessages(['channel' => $peer, 'id' => [$msg_id]]);
+  $messag1 = $gmsg['messages'][0]['reply_to_msg_id'];
+  $gms = yield $MadelineProto->channels->getMessages(['channel' => $peer, 'id' => [$messag1]]);
+  $messag = $gms['messages'][0]['from_id'];
+  yield $MadelineProto->contacts->unblock(['id' => $messag]);
+  $MadelineProto->messages->editMessage(['peer' => $peer,'id' => $msg_id,'message' => "ᴜɴʙʟᴏᴄᴋᴇᴅ!"]);
+  } else {
+  	if($type3 == 'user'){
+yield $MadelineProto->contacts->unblock(['id' => $peer]); $MadelineProto->messages->editMessage(['peer' => $peer,'id' => $msg_id,'message' => "ᴜɴʙʟᴏᴄᴋᴇᴅ!"]);
+}
+}
+}
+
+if($text == 'block' or $text == '/block' or $text == '!block'){
+if($type3 == 'supergroup' or $type3 == 'chat'){
+  $gmsg = yield $MadelineProto->channels->getMessages(['channel' => $peer, 'id' => [$msg_id]]);
+  $messag1 = $gmsg['messages'][0]['reply_to_msg_id'];
+  $gms = yield $MadelineProto->channels->getMessages(['channel' => $peer, 'id' => [$messag1]]);
+  $messag = $gms['messages'][0]['from_id'];
+  yield $MadelineProto->contacts->block(['id' => $messag]);
+  $MadelineProto->messages->editMessage(['peer' => $peer,'id' => $msg_id,'message' => "ʙʟᴏᴄᴋᴇᴅ!"]);
+  } else {
+ 	if($type3 == 'user'){
+yield $MadelineProto->contacts->block(['id' => $peer]); $MadelineProto->messages->editMessage(['peer' => $peer,'id' => $msg_id,'message' => "ʙʟᴏᴄᴋᴇᴅ!"]);
+}
+}
+}
+
+if(preg_match("/^[\/\#\!]?(setenemy) (.*)$/i", $text)){
+$gmsg = yield $MadelineProto->channels->getMessages(['channel' => $peer, 'id' => [$msg_id]]);
+  $messag1 = $gmsg['messages'][0]['reply_to_msg_id'];
+  $gmsg = yield $MadelineProto->channels->getMessages(['channel' => $peer, 'id' => [$messag1]]);
+  $messag = $gmsg['messages'][0]['from_id'];
+  if(!in_array($messag, $data['enemies'])){
+    $data['enemies'][] = $messag;
+    file_put_contents("data.json", json_encode($data));
+    yield $MadelineProto->contacts->block(['id' => $messag]);
+    $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "$messag ɪꜱ ɴᴏᴡ ɪɴ ᴇɴᴇᴍʏ ʟɪꜱᴛ"]);
+  } else {
+    $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "ᴛʜɪꜱ ᴜꜱᴇʀ ᴡᴀꜱ ɪɴ ᴇɴᴇᴍʏʟɪꜱᴛ"]);
+  }
+}
+if(preg_match("/^[\/\#\!]?(delenemy) (.*)$/i", $text)){
+$gmsg = yield $MadelineProto->channels->getMessages(['channel' => $peer, 'id' => [$msg_id]]);
+  $messag1 = $gmsg['messages'][0]['reply_to_msg_id'];
+  $gmsg = yield $MadelineProto->channels->getMessages(['channel' => $peer, 'id' => [$messag1]]);
+  $messag = $gmsg['messages'][0]['from_id'];
+  if(in_array($messag, $data['enemies'])){
+    $k = array_search($messag, $data['enemies']);
+    unset($data['enemies'][$k]);
+    file_put_contents("data.json", json_encode($data));
+    yield $MadelineProto->contacts->unblock(['id' => $messag]);
+    $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "$messag ᴅᴇʟᴇᴛᴇᴅ ꜰʀᴏᴍ ᴇɴᴇᴍʏ ʟɪꜱᴛ"]);
+  } else{
+    $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "ᴛʜɪꜱ ᴜꜱᴇʀ ᴡᴀꜱɴ'ᴛ ɪɴ ᴇɴᴇᴍʏʟɪꜱᴛ"]);
+  }
+ }
+}
+
+if(preg_match("/^[\/\#\!]?(answerlist)$/i", $text)){
+if(count($data['answering']) > 0){
+$txxxt = "ʟɪꜱᴛ ᴏꜰ ᴀɴꜱᴡᴇʀꜱ :
+";
+$counter = 1;
+foreach($data['answering'] as $k => $ans){
+$txxxt .= "$counter: $k => $ans \n";
+$counter++;
+}
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => $txxxt]);
+}else{
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "ᴛʜᴇʀᴇ ɪꜱ ɴᴏ ᴀɴꜱᴡᴇʀ!"]);
+  }
+ }
+
+
+if($text == ' راهنما' or $text == 'رانما' or $text == 'راعنما' or $text == 'زاهنما' or $text == 'داهنما' or $text == 'واهنما' or $text == 'کمک' or $text == 'درخاست کمک' or $text == 'هلپ '){
+$load = sys_getloadavg();
+$mem_using = round(memory_get_usage() / 1024 / 1024,1);
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "
+🔹راهنمای فارسی 🔹
+🔺 دریافت راهنمای فارسی 🔺
+
+🔹راهنمای انگلیسی 🔹
+🔺 دریافت راهنمای انگلیسی🔺
+
+🔹سلف چیه / سلف چیست 🔹
+🔺 دریافت معنا مفهوم و کاربرد سلف 🔺
+
+⛩ ᴄᴏᴅᴇᴅ ʙʏ @akdol 🎆
+
+",
+'parse_mode' => 'markdown']);
+}
+
+
+if($text == ' راهنما' or $text == 'رانما' or $text == 'راعنما' or $text == 'زاهنما' or $text == 'داهنما' or $text == 'واهنما' or $text == 'کمک' or $text == 'درخاست کمک' or $text == 'هلپ '){
+$load = sys_getloadavg();
+$mem_using = round(memory_get_usage() / 1024 / 1024,1);
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "
+🔹راهنمای فارسی 🔹
+🔺 دریافت راهنمای فارسی 🔺
+
+🔹راهنمای انگلیسی 🔹
+🔺 دریافت راهنمای انگلیسی🔺
+
+🔹سلف چیه / سلف چیست 🔹
+🔺 دریافت معنا مفهوم و کاربرد سلف 🔺
+
+⛩ ᴄᴏᴅᴇᴅ ʙʏ @akdol 🎆
+
+",
+'parse_mode' => 'markdown']);
+}
+
+if($text == ' سلف چیست' or $text == 'سلف چیه'){
+$load = sys_getloadavg();
+$mem_using = round(memory_get_usage() / 1024 / 1024,1);
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "
+خب کصخله کیری 🙂
+سلف ی ربات کاربردیه هم میتونی باهاش سرگرم شی هم میتونی 
+باهاش ناموص ماموص بدخاهاتو بگایی 🤠
+مصلن تو گپ رو یکی ریپلی میزنی میگی
+/setenemy replay
+اون یارو میره تو لیست بدخاهای بیناموص 🤠 تو پیویت 
+یا تو هر گروهی ک تو باشی اگ پیام بده اکانتت روش ریپلی میزنه و فشش میده خلاصه ک ناموصشو میگاد😁
+
+خب دیگه بقیشو خودت تست کن و حالشو ببر  🙂💜
+
+⛩ @akdol 🎆
+
+",
+'parse_mode' => 'markdown']);
+}
+
+
+if($text == 'راهنما فارسی' or $text == 'راهنمافا' or $text == 'راهنمافارسی' or $text == 'راهنمای فارسی' or $text == 'HelpFa' or $text == 'helpFa' or $text == 'helpfa' or $text == 'Help Fa' or $text == 'help fa '){
+$load = sys_getloadavg();
+$mem_using = round(memory_get_usage() / 1024 / 1024,1);
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "
+↯🎆ᴀʙʟɪs sᴇʟғ ʜᴇʟᴘ🎆↯
+
+۝░░░░░░░░░░░░░░░░░⒮⒤⒮░░░░░░░⒜⒝⒧⒤⒮░░۝
+★﴾ ⛩🎆 @akdol 🎆⛩﴿  سلف میدلاین و مدیریت اکانت ★
+۝░░░░░░░░░░░░░░░░░⒮⒤⒮░░░░░░░⒜⒝⒧⒤⒮░░۝
+
+
+🎛⚙️ مدیریت اکانت ⚙️🎛
+
+
+⛩  /bot  on یا /bot off  🔋
+🔕خاموش و روشن کردن ربات 📢
+ 
+  🤖   ping    ربات  🤖
+📳 اطلاع از انلاین بودن ربات 🚀
+ 
+🔰  load   🚧
+♋️ دریافت پینگ سرور 📯
+ 
+🔌 online on یا online off ⏰
+⌚️ روشن و خاموش کردن ساعت تو اسمو بیو 📱
+ 
+⌨️ typing on یا typing off ❇️
+🖨 روشن و خاموش کردن حالت (درحال نوشتن)تو گروه بعد ازهرپیام 🖥
+ 
+👁 markread  on یا markread off 👁‍🗨
+👁‍🗨 روشن و خاموش کردن حالت سین خودکار 👀
+ 
+😐  poker  on یا poker off  😐
+ 😐 روشن و خاموش کردن حالت پوکر(هرجا پوکر ببینه روش ریپلی میزنه 😐) 🎆
+ 
+
+👨‍🎨🎇 ♋️🌌 ابزار کاربردی و سرگرمی 🌌♋️🎇👨‍🎨
+
+ 
+📒 wiki (text) 📔
+📕 جستجو در ویکی پدیا 📗
+ 
+☁️ /weather اسم شهر 🌤
+🌨 دریافت وضعیت هوای شهر دلخاه🌪
+ 
+🅰️ /music  [متن]  ☢️
+🎙 موسیقی دلخاه 🎶
+ 
+♋️ /info  [@username]  ♓️
+ا🔭 طلاعات کاربر با ایدی 💡
+ 
+🌀  gpinfo  🚸
+🗽 دریافت اطلاعات گروه🗿
+ 
+⚗️ /sessions  💈
+🚻 دریافت نشصت های فعال اکانت🔬
+ 
+🗃 /save  [ریپلی]  📦
+💽  زخیره کردن متن فایل و هرچیز دیگعی تو پیوی (فضای ابری ) ربات 💾
+ 
+🔄 /id  [ریپلی]  🔀
+🀄️ دریافت ایدی عددی شخص با ریپلی✔️
+ 
+📸 pic (متن)  🕹
+🖼 دریافت عکس مرتبط با متن 📜
+
+🎥 gif (متن) 📹
+📽 دریافت گیف مرتبط با متن 🎞
+ 
+🎉  /joke 🎎
+🤸‍♀️ جوک بصورت رندوم 🙉
+ 
+🐾 like (متن) ☘️
+👍 ساخت متن بهمراه دکمه ی لایک 👎
+ 
+📡 search (متن)  📲
+🔍 جستجوی متن تو پیوی و گروه 🔎
+
+
+🐝  زنبور یا vizviz  🐝
+⚠️ زنبور مادرجنده و انسان بی نوا ❌
+ 
+💦  ساک یا suck  🗣
+🤣 صاک زدن مادر بدخاها برا صگِ سیس ابلیس ⚡️
+ 
+💦  جق یا  jaq  💧
+👳 جق زدن مادر بدخاها برا صگِ سیس ابلیس 👵
+《 سیس ابلیس کیرشو نجص نمیکنه ❌😐 》 
+
+ 🏎   ماشین یا car   🏎
+💥 انفجار ماشین🔥
+ 
+🏍  موتور  یا  motor  🏍
+🧲  موتور و اهنربا  🧲
+
+🍌    بکیرم یا bk    🍌
+🕺 کلمه ی bk بصورت اموجی 🐒
+ 
+🍌 کیر یا kir  🍌
+🐊  کلمه ی کیر با اموجی 💦
+
+ 
+ 🕧 بخش ساعت 🕕
+ 
+🕞  ساعت  🕘
+🏋️‍♀️ دریافت ساعت دقیق تا 60 صانیه بروز میشه 🎗
+ 
+🇮🇷 Oy sana  🇮🇷
+🇮🇷دریافت Oy sana 🇮🇷
+ 
+🇲🇸 Grigoriy 🇲🇸
+ 🇲🇸 دریافت Grigoriy 🇲🇸
+ 
+ 
+ 
+🚷🚯🚳🚱🔞📵🚭 ابزار گایدن ناموص بدخا 🚭📵🔞🚱🚳🚯🚷
+
+
+♨️ /setenemy  ایدی عددی بیناموص یا ریپلی  ♨️
+⭕️ تنظیم بدخا با ایدی عددی یا ریپلی(ریپلی فقط تو گروه کارمیکنه اینجوری ⭕️ 
+/setenemy replay 
+
+ 
+♨️ /delenemy  ایدی عددی بیناموص یا ریپلی ♨️
+⭕️ حزف بدخا با ایدی عددی یا ریپلی (ریپلی فقط تو گروه کارمیکنه  اینجوری ⭕️
+/delenemy replay 
+ 
+♨️  clean enemylist   ♨️
+⭕️ پاک کردن لیست بدخاعای بیناموص ⭕️
+ 
+♨️ flood  [تعداد] [متن] ♨️
+ ⭕️ اسپم جمله تو یک پیام ⭕️
+ 💢 مصال ♨️
+ flood 10 کیون
+ 
+♨️  بشمار  ♨️
+⭕️ ارسال عدد ازیک  تا ده مخصوص گاعیدن ناموص بدخاعا ⭕️
+ 
+♨️ spam  [تعداد] [متن] ♨️
+⭕️ ارسال یک پیام ب تعداد دلخاه ⭕️
+ 💢 مصال 💢
+ spam 10 کیون 
+ 
+🔞  for  🔞
+📵 فروارد فش رگباری 🚳
+ 
+🔥  شمارش فا   🔥
+💥 ارصال یعالمه فش فارسی و شمارش 💥
+ 
+🔥   شمارش ان   🔥
+☄️ ارسال یعالمه فش انگلیسی و شمارش 💥
+ 
+
+⛓💡 پخش جواب خودکار 💡⛓
+
+ 
+🛰 /setanswer  جواب|متن  🚀
+☣️ تنظیم جواب خدکار برا ی کلمه یا جمله ♊️
+ 💯 مصال 💯
+ /setanswer Sis|baleArbab 
+ ☣️فارسیم میتونین بنویسین 🏋️‍♀️
+ 
+ 
+⚜️ /delanswer  [متن] ✴️
+🕎 حزف جواب خدکار 🕎
+ 💯 مصال 💯
+ /delanswer Sis
+ 
+ 
+♋️ /answerlist ♋️
+  📑 دریافت لیست جواب خدکار 📑
+  
+  
+⛔️ /clean answers  📛
+🚫 خالی کردن لیست جواب خدکار 🚫
+ 
+ 
+۝░░░░░░░░░░░░░░░░░⒮⒤⒮░░░░░░░⒜⒝⒧⒤⒮░░۝
+★﴾ ⛩🎆 @Akdol 🎆⛩﴿  سلف میدلاین و مدیریت اکانت ★
+۝░░░░░░░░░░░░░░░░░⒮⒤⒮░░░░░░░⒜⒝⒧⒤⒮░░۝
+ 
+۝۝۝۝۝۝۝۝۝۝۝۝
+
+➣ ᴘɪɴɢ ᴀɴᴅ ʟᴏᴀᴅ ɢᴜɪᴅᴇ 
+ 
+ᴀᴍᴏᴜɴᴛ ᴏꜰ ʀᴀᴍ ɪɴ ᴜꜱᴇ : $mem_using ᴍʙ
+ᴘɪɴɢ ʟᴏᴀᴅᴇᴅ ꜱᴇʀᴠᴇʀ : $load[0]
+",
+'parse_mode' => 'markdown']);
+}
+
+
+if($text == 'akdol' or $text == 'Akdol' or $text == 'help' or $text == 'Help' or $text == 'HelpEn' or $text == 'helpen' or $text == 'Help En' or $text == 'help en '){
+$load = sys_getloadavg();
+$mem_using = round(memory_get_usage() / 1024 / 1024,1);
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "
+↯🎆sᴇʟғ ʜᴇʟᴘ🎆↯
+
+۝░░░░░░░░░░░░░░░░░۝
+★﴾sᴇʟғ ʙᴏᴛ ᴀɴᴅ ᴀᴄᴄᴏᴜɴᴛ ᴍᴀɴᴀɢᴇʀ ⛩🎆 @Tahririyat 🎆⛩﴿ ★
+۝░░░░░░░░░░░░░░░░░۝
+
+🤖ʍaռaɢɛ ɮօt : 🏆
+
+□ bot  on  ᵒʳ  bot off  □
+●ʙᴏᴛ  ᴏɴ ᴀɴᴅ ᴏғғ●
+
+□ Ping  ᵒʳ  Bot □
+●ᴋɴᴏᴡ ᴛʜᴀᴛ ʙᴏᴛ ɪs ᴏɴʟɪɴᴇ ᴏʀ ᴏғғʟɪɴᴇ●
+
+□ load □
+●sᴇʀᴠᴇʀ ʟᴏᴀᴅ●
+
+□ online  on  ᵒʳ  online off □
+●sᴇᴛ ᴛɪᴍᴇ ɪɴ ɴᴀᴍᴇ ᴀɴᴅ ʙɪᴏ ᴡɪᴛʜ 9 ғᴏɴᴛ●
+
+□ typing on  ᵒʳ  typing off □
+●ᴛʏᴘɪɴɢ sᴛᴀᴛᴇ ɪɴ ɢʀᴏᴜᴘ●
+
+□markread on  ᵒʳ  markread off
+●ᴀᴜᴛᴏ sᴇᴇɴ ɪɴ ᴘᴠ●
+
+□ poker on  ᵒʳ  poker off □
+● ᴘᴏᴋᴇʀ sᴛᴀᴛᴇ ᴏɴ ᴏʀ ᴏғғ ɪɴ ɢʀᴏᴜᴘ ᴀɴᴅ ᴘᴠ●
+⭕️♨️⭕️♨️⭕️♨️⭕️♨️⭕️♨️⭕️♨️⭕️♨️⭕️
+
+🛠  🇵 🇷 🇦 🇹 🇮 🇨 🇦 🇱  🇦 🇳 🇩  🇫 🇺 🇳  🎮
+
+○ car ○
+■ ɛxքʟօsɨօռ ᴄaʀ ■
+
+○ motor ○
+■ ʍaɢռɛt ʍօtօʀ ■
+
+○ kir ○
+■ աօʀɖ ҡɨʀ աɨtɦ ɛʍօʝɨ ■
+
+○ wiki { TexT} ○
+■ sɛʀᴄɦ ɨռ աɨҡɨ քɛɖɨa ■
+
+○ /weather  { City Name } ○
+■ ᴄɨtʏ աatɦɛʀ ■
+
+○ /music  [TexT] ○
+■ sɛʀᴄɦ ʍʊsɨᴄ ■
+
+○ /info  {@username} ○
+■ ʊsɛʀ ɨռʄօʀʍatɨօռ ■
+
+○ gpinfo ○
+■ ɢɛt ɢʀօʊք ɨռʄօʀʍatɨօռ ■
+
+○ /sessions ○
+■ ɢɛt aᴄᴄօʊռt sɛssɨօռs ■ 
+
+○ /save  {RepLay} ○
+■ saʋɛ aռʏtɦɨռɢ ɨռ ɮօt քʋ ■
+
+○ /id  {RepLay} ○
+■ ɢɛt ʊsɛʀ ɨɖ ■
+
+○ pic {TexT} ○
+■ sɛʀᴄɦ քɨᴄtʊʀɛ ■
+
+○ gif {TexT} ○
+■ sɛʀᴄɦ ɢɨʄ ■
+
+○ /joke ○
+■ ɢɛt ■ X O game
+
+○ Like {TexT} ○ 
+■ ᴄʀɛatɛ ʋօtɛ ■
+
+○ search { TexT} ○
+■sɛʀᴄɦ աօʀɖ ɨռ քʋ aռɖ ɢʀօʊք ■
+
+○ vizviz ○
+■ ɮɛɛ aռɖ ɦʊʍaռ ■
+
+○ suck ○ or 
+■ sʊᴄҡ ɦʊʍaռ ■
+
+○ jaq ○ or ok
+■ ʍastʊʀɮatɨօռ ■ 
+
+♋️💡⌚️ ᴛɪᴍᴇ sᴇᴄᴛɪᴏɴ ⌚️💡♋️
+
+░ time ░
+⌛ ɢɛt tɨʍɛ ⌛
+
+░ Grigoriy  ░
+⌛ ɢɛt ᴄɦʀɨst ɖatɛ ⌛
+
+⭕️💯🔞  ᵉⁿᵉᵐʸ ᵗᵒᵒˡˢ  🔞💯⭕️
+
+♒️ /setenemy  《userid》 or ⪻replay⪼  ♒️
+💢 ˢᵉᵗ ᵉⁿᵉᵐʸ ʷᶦᵗʰ ᵘˢᵉʳᶦᵈ ᵃⁿᵈ ʳᵉᵖˡᵃʸ 💯  ɪɴ ɢʀᴏᴜᴘ : /setenemy replay 💯
+
+♒️ /delenemy  《userid》or ⪻replay⪼ ♒️
+💢 ˢᵉᵗ ᵉⁿᵉᵐʸ ʷᶦᵗʰ ᵘˢᵉʳᶦᵈ ᵃⁿᵈ ʳᵉᵖˡᵃʸ 💯  ɪɴ ɢʀᴏᴜᴘ : /delenemy replay 💯
+
+♒️ clean enemylist ♒️
+💢 ᶜˡᵉᵃⁿ ᵉⁿᵉᵐʸ ˡᶦˢᵗ 💢
+
+♒️ flood  《NUMBER》 《TEXT》♒️
+💢  ˢᵖᵃᵐ ᵗᵉˣᵗ ᶦⁿ 1 ᵖᵐ  💢
+
+♒️  number  ♒️
+💢 ⁿᵘᵐᵇᵉʳ 1-10 💢
+
+♒️ spam《NUMBER》《TEXT》♒️
+💢 ˢᵖᵃᵐ ᵗᵉˣᵗ 💢
+
+♒️ for ♒️
+💢 ᶠᵒʳʷᵃʳᵈ ᶠᵒˢʰ ᶠʳᵒᵐ ᶜʰᵃⁿⁿᵉˡ 💢
+
+♒️ NumberUz ♒️
+💢 ˢᵉⁿᵈ ᶠᵒˢʰ ᵃⁿᵈ ⁿᵘᵐᵇᵉʳ  ᵉⁿᵍˡᶦˢʰ 💢
+
+📣❇️☣️ aʊtօ aռsաɛʀ 𝒔𝒆𝒄𝒕𝒊𝒐𝒏  ☣️❇️📣
+
+⛩ /setanswer  word|answer  🎆
+⚛️ sɛt aʊtօ aռsաɛʀ { /setanswer hi|bye} ☣️
+
+⛩ /delanswer  《text》🎆
+⚛️ ɖɛʟ aʊtօ aռsաɛʀ { /delanswer hi } ☣️
+
+⛩ /answerlist 🎆
+⚛️ ɢɛt aʊtօ aռsաɛʀ ʟɨst ☣️
+
+⛩ /clean answers 🎆
+⚛️ ᴄʟɛaռ aʊtօ aռsաɛʀ ʟɨst ☣️
+
+۝░░░░░░░░░░░░░░░░░۝
+★﴾sᴇʟғ ʙᴏᴛ ᴀɴᴅ ᴀᴄᴄᴏᴜɴᴛ ᴍᴀɴᴀɢᴇʀ ᴄᴏᴅᴇᴅ ʙʏ ⛩🎆 @Masalanda_endi 🎆⛩﴿ ★
+۝░░░░░░░░░░░░░░░░░۝ 
+
+↻♢ ᴘɪɴɢ ᴀɴᴅ ʟᴏᴀᴅ ɢᴜɪᴅᴇ ♢↻
+
+ᴀᴍᴏᴜɴᴛ ᴏꜰ ʀᴀᴍ ɪɴ ᴜꜱᴇ : $mem_using ᴍʙ
+ᴘɪɴɢ ʟᴏᴀᴅᴇᴅ ꜱᴇʀᴠᴇʀ : $load[0]
+
+",
+'parse_mode' => 'markdown']);
+}
+
+if(preg_match("/^[\/\#\!]?(save)$/i", $text) && isset($message['reply_to_msg_id'])){
+$me = yield $MadelineProto->get_self();
+$me_id = $me['id'];
+yield $MadelineProto->messages->forwardMessages(['from_peer' => $peer, 'to_peer' => $me_id, 'id' => [$message['reply_to_msg_id']]]);
+      $MadelineProto->messages->editMessage(['peer' => $peer,'id' => $msg_id,'message' => "🔱♨️> ꜱᴀᴠᴇᴅ🔱♨️"]);
+     }
+ if(preg_match("/^[\/\#\!]?(typing) (on|off)$/i", $text)){
+preg_match("/^[\/\#\!]?(typing) (on|off)$/i", $text, $m);
+$data['typing'] = $m[2];
+file_put_contents("data.json", json_encode($data));
+      $MadelineProto->messages->editMessage(['peer' => $peer,'id' => $msg_id,'message' => "ᴛʏᴘɪɴɢ ɴᴏᴡ ɪꜱ $m[2]"]);
+     }
+ if(preg_match("/^[\/\#\!]?(echo) (on|off)$/i", $text)){
+preg_match("/^[\/\#\!]?(echo) (on|off)$/i", $text, $m);
+$data['echo'] = $m[2];
+file_put_contents("data.json", json_encode($data));
+      $MadelineProto->messages->editMessage(['peer' => $peer,'id' => $msg_id,'message' => "ᴇᴄʜᴏ ɴᴏᴡ ɪꜱ $m[2]"]);
+     }
+ if(preg_match("/^[\/\#\!]?(markread) (on|off)$/i", $text)){
+preg_match("/^[\/\#\!]?(markread) (on|off)$/i", $text, $m);
+$data['markread'] = $m[2];
+file_put_contents("data.json", json_encode($data));
+      $MadelineProto->messages->editMessage(['peer' => $peer,'id' => $msg_id,'message' => "ᴍᴀʀᴋʀᴇᴀᴅ ɴᴏᴡ ɪꜱ $m[2]"]);
+     }
+ if(preg_match("/^[\/\#\!]?(info) (.*)$/i", $text)){
+preg_match("/^[\/\#\!]?(info) (.*)$/i", $text, $m);
+$mee = yield $MadelineProto->get_full_info($m[2]);
+$me = $mee['User'];
+$me_id = $me['id'];
+$me_status = $me['status']['_'];
+$me_bio = $mee['full']['about'];
+$me_common = $mee['full']['common_chats_count'];
+$me_name = $me['first_name'];
+$me_uname = $me['username'];
+$mes = "ɪᴅ : $me_id \nɴᴀᴍᴇ: $me_name \nᴜꜱᴇʀɴᴀᴍᴇ: @$me_uname \nꜱᴛᴀᴛᴜꜱ: $me_status \nʙɪᴏ: $me_bio \nᴄᴏᴍᴍᴏɴ ɢʀᴏᴜᴘꜱ ᴄᴏᴜɴᴛ: $me_common";
+$MadelineProto->messages->editMessage(['peer' => $peer,'id' => $msg_id,'message' => $mes]);
+     }
+ if(preg_match("/^[\/\#\!]?(block) (.*)$/i", $text)){
+preg_match("/^[\/\#\!]?(block) (.*)$/i", $text, $m);
+yield $MadelineProto->contacts->block(['id' => $m[2]]);
+$MadelineProto->messages->editMessage(['peer' => $peer,'id' => $msg_id,'message' => "ʙʟᴏᴄᴋᴇᴅ!"]);
+     }
+ if(preg_match("/^[\/\#\!]?(unblock) (.*)$/i", $text)){
+preg_match("/^[\/\#\!]?(unblock) (.*)$/i", $text, $m);
+yield $MadelineProto->contacts->unblock(['id' => $m[2]]);
+$MadelineProto->messages->editMessage(['peer' => $peer,'id' => $msg_id,'message' => "ᴜɴʙʟᴏᴄᴋᴇᴅ!"]);
+     }
+ if(preg_match("/^[\/\#\!]?(checkusername) (@.*)$/i", $text)){
+preg_match("/^[\/\#\!]?(checkusername) (@.*)$/i", $text, $m);
+$check = yield $MadelineProto->account->checkUsername(['username' => str_replace("@", "", $m[2])]);
+if($check == false){
+$MadelineProto->messages->editMessage(['peer' => $peer,'id' => $msg_id,'message' => "ᴇxɪꜱᴛꜱ!"]);
+} else{
+$MadelineProto->messages->editMessage(['peer' => $peer,'id' => $msg_id,'message' => "ꜰʀᴇᴇ!"]);
+}
+     }
+ if(preg_match("/^[\/\#\!]?(setfirstname) (.*)$/i", $text)){
+preg_match("/^[\/\#\!]?(setfirstname) (.*)$/i", $text, $m);
+yield $MadelineProto->account->updateProfile(['first_name' => $m[2]]);
+$MadelineProto->messages->editMessage(['peer' => $peer,'id' => $msg_id,'message' => "ᴅᴏɴᴇ!"]);
+     }
+ if(preg_match("/^[\/\#\!]?(setlastname) (.*)$/i", $text)){
+preg_match("/^[\/\#\!]?(setlastname) (.*)$/i", $text, $m);
+yield $MadelineProto->account->updateProfile(['last_name' => $m[2]]);
+$MadelineProto->messages->editMessage(['peer' => $peer,'id' => $msg_id,'message' => "ᴅᴏɴᴇ!"]);
+     }
+ if(preg_match("/^[\/\#\!]?(setbio) (.*)$/i", $text)){
+preg_match("/^[\/\#\!]?(setbio) (.*)$/i", $text, $m);
+yield $MadelineProto->account->updateProfile(['about' => $m[2]]);
+$MadelineProto->messages->editMessage(['peer' => $peer,'id' => $msg_id,'message' => "ᴅᴏɴᴇ!"]);
+     }
+ if(preg_match("/^[\/\#\!]?(setusername) (.*)$/i", $text)){
+preg_match("/^[\/\#\!]?(setusername) (.*)$/i", $text, $m);
+yield $MadelineProto->account->updateUsername(['username' => $m[2]]);
+$MadelineProto->messages->editMessage(['peer' => $peer,'id' => $msg_id,'message' => "ᴅᴏɴᴇ!"]);
+     }
+ if(preg_match("/^[\/\#\!]?(join) (.*)$/i", $text)){
+preg_match("/^[\/\#\!]?(join) (.*)$/i", $text, $m);
+yield $MadelineProto->channels->joinChannel(['channel' => $m[2]]);
+$MadelineProto->messages->editMessage(['peer' => $peer,'id' => $msg_id,'message' => "ᴊᴏɪɴᴇᴅ!"]);
+     }
+if(preg_match("/^[\/\#\!]?(add2all) (@.*)$/i", $text)){
+preg_match("/^[\/\#\!]?(add2all) (@.*)$/i", $text, $m);
+$dialogs = yield $MadelineProto->get_dialogs();
+foreach ($dialogs as $peeer) {
+$peer_info = yield $MadelineProto->get_info($peeer);
+$peer_type = $peer_info['type'];
+if($peer_type == "supergroup"){
+  yield $MadelineProto->channels->inviteToChannel(['channel' => $peeer, 'users' => [$m[2]]]);
+}
+}
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "ᴀᴅᴅᴇᴅ ᴛᴏ ᴀʟʟ ꜱᴜᴘᴇʀɢʀᴏᴜᴘꜱ"]);
+     }
+ if(preg_match("/^[\/\#\!]?(newanswer) (.*) \|\|\| (.*)$/i", $text)){
+preg_match("/^[\/\#\!]?(newanswer) (.*) \|\|\| (.*)$/i", $text, $m);
+$txxt = $m[2];
+$answeer = $m[3];
+if(!isset($data['answering'][$txxt])){
+$data['answering'][$txxt] = $answeer;
+file_put_contents("data.json", json_encode($data));
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "ɴᴇᴡ ᴡᴏʀᴅ ᴀᴅᴅᴇᴅ ᴛᴏ ᴀɴꜱᴡᴇʀʟɪꜱᴛ"]);
+} else{
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "ᴛʜɪꜱ ᴡᴏʀᴅ ᴡᴀꜱ ɪɴ ᴀɴꜱᴡᴇʀʟɪꜱᴛ"]);
+}
+     }
+ if(preg_match("/^[\/\#\!]?(delanswer) (.*)$/i", $text)){
+preg_match("/^[\/\#\!]?(delanswer) (.*)$/i", $text, $m);
+$txxt = $m[2];
+if(isset($data['answering'][$txxt])){
+unset($data['answering'][$txxt]);
+file_put_contents("data.json", json_encode($data));
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "ᴡᴏʀᴅ ᴅᴇʟᴇᴛᴇᴅ ꜰʀᴏᴍ ᴀɴꜱᴡᴇʀʟɪꜱᴛ"]);
+} else{
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "ᴛʜɪꜱ ᴡᴏʀᴅ ᴡᴀꜱɴ'ᴛ ɪɴ ᴀɴꜱᴡᴇʀʟɪꜱᴛ"]);
+}
+     }
+ if(preg_match("/^[\/\#\!]?(clean answers)$/i", $text)){
+$data['answering'] = [];
+file_put_contents("data.json", json_encode($data));
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "ᴀɴꜱᴡᴇʀʟɪꜱᴛ ɪꜱ ɴᴏᴡ ᴇᴍᴘᴛʏ!"]);
+     }
+ if(preg_match("/^[\/\#\!]?(setenemy) (.*)$/i", $text)){
+preg_match("/^[\/\#\!]?(setenemy) (.*)$/i", $text, $m);
+$mee = yield $MadelineProto->get_full_info($m[2]);
+$me = $mee['User'];
+$me_id = $me['id'];
+$me_name = $me['first_name'];
+if(!in_array($me_id, $data['enemies'])){
+$data['enemies'][] = $me_id;
+file_put_contents("data.json", json_encode($data));
+yield $MadelineProto->contacts->block(['id' => $m[2]]);
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "$me_name ɪꜱ ɴᴏᴡ ɪɴ ᴇɴᴇᴍʏ ʟɪꜱᴛ"]);
+} else {
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "ᴛʜɪꜱ ᴜꜱᴇʀ ᴡᴀꜱ ɪɴ ᴇɴᴇᴍʏʟɪꜱᴛ"]);
+}
+     }
+ if(preg_match("/^[\/\#\!]?(delenemy) (.*)$/i", $text)){
+preg_match("/^[\/\#\!]?(delenemy) (.*)$/i", $text, $m);
+$mee = yield $MadelineProto->get_full_info($m[2]);
+$me = $mee['User'];
+$me_id = $me['id'];
+$me_name = $me['first_name'];
+if(in_array($me_id, $data['enemies'])){
+$k = array_search($me_id, $data['enemies']);
+unset($data['enemies'][$k]);
+file_put_contents("data.json", json_encode($data));
+yield $MadelineProto->contacts->unblock(['id' => $m[2]]);
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "$me_name ᴅᴇʟᴇᴛᴇᴅ ꜰʀᴏᴍ ᴇɴᴇᴍʏ ʟɪꜱᴛ"]);
+} else{
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "ᴛʜɪꜱ ᴜꜱᴇʀ ᴡᴀꜱɴ'ᴛ ɪɴ ᴇɴᴇᴍʏʟɪꜱᴛ"]);
+}
+     }
+ if(preg_match("/^[\/\#\!]?(clean enemylist)$/i", $text)){
+$data['enemies'] = [];
+file_put_contents("data.json", json_encode($data));
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "ᴇɴᴇᴍʏʟɪꜱᴛ ɪꜱ ɴᴏᴡ ᴇᴍᴘᴛʏ!"]);
+     }
+ if(preg_match("/^[\/\#\!]?(enemylist)$/i", $text)){
+if(count($data['enemies']) > 0){
+$txxxt = "ᴇɴᴇᴍʏʟɪꜱᴛ :
+";
+$counter = 1;
+foreach($data['enemies'] as $ene){
+  $mee = yield $MadelineProto->get_full_info($ene);
+  $me = $mee['User'];
+  $me_name = $me['first_name'];
+  $txxxt .= "$counter: $me_name \n";
+  $counter++;
+}
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => $txxxt]);
+} else{
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "ɴᴏ ᴇɴᴇᴍʏ!"]);
+}
+     }
+ if(preg_match("/^[\/\#\!]?(inv) (@.*)$/i", $text) && $update['_'] == "updateNewChannelMessage"){
+preg_match("/^[\/\#\!]?(inv) (@.*)$/i", $text, $m);
+$peer_info = yield $MadelineProto->get_info($message['to_id']);
+$peer_type = $peer_info['type'];
+if($peer_type == "supergroup"){
+yield $MadelineProto->channels->inviteToChannel(['channel' => $message['to_id'], 'users' => [$m[2]]]);
+} else{
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "ᴊᴜꜱᴛ ꜱᴜᴘᴇʀɢʀᴏᴜᴘꜱ"]);
+}
+     }
    
-       if($text1 == "👥Guruhlarga xabar yuborish" and $chat_id == $admin){
-      ty($chat_id);
-      bot('sendmessage',[
-      'chat_id'=>$chat_id,
-      'text'=>$yubbi,
-      ]);
-      file_put_contents("stat/$chat_id.step","guruh");
-    }
-
-       if($text1 == "👥Guruhlarga xabar yuborish" and $chat_id == $admin){
-      ty($chat_id);
-      bot('sendmessage',[
-      'chat_id'=>$chat_id,
-      'text'=>$yubbi,
-      ]);
-      file_put_contents("stat/$chat_id.step","guruh");
-    }
-
-    if($step == "guruh" and $chat_id == $admin){
-    	         file_put_contents("stat/$chat_id.step","link1");
-          file_put_contents("stat/$chat_id.matn1",$text1);
- bot('sendmessage',[
-          'chat_id'=>$admin,
-              'parse_mode'=>"markdown",
-          'text'=>"✅*Matn qabul qilindi endi namuna bo'yicha knopkani yuboring!
-Namuna:*
-`Yoqu + https://t.me/akdol`",
-          ]);      
-}
-
-if($step == "link1"){
-      if($text1 == "/otmen"){
-      file_put_contents("stat/$chat_id.step","");
-      }else{ 
-      	      $matn1=file_get_contents("stat/$chat_id.matn1");
      
-   $i=0;
-$keyboard = [];
-$keyboard["inline_keyboard"] = [];
-$rows = explode("\n",$text1);
-foreach($rows as $row){
-$j=0;
-$keyboard["inline_keyboard"][$i]=[];
-$bottons = explode(",",$row);
-foreach($bottons as $botton){
-$data = explode("+",$botton."+");
-$Ibotton = ["text" => trim($data[0]), "url" => trim($data[1])];
-$keyboard["inline_keyboard"][$i][$j] = $Ibotton;
-$j++;
+ if(preg_match("/^[\/\#\!]?(leave)$/i", $text)){
+ 	$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "Leave"]);
+yield $MadelineProto->channels->leaveChannel(['channel' => $message['to_id']]);
+     }
+ if(preg_match("/^[\/\#\!]?(flood) ([0-9]+) (.*)$/i", $text)){
+preg_match("/^[\/\#\!]?(flood) ([0-9]+) (.*)$/i", $text, $m);
+$count = $m[2];
+$txt = $m[3];
+$spm = "";
+for($i=1; $i <= $count; $i++){
+$spm .= " $txt \n";
 }
-$i++;
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => $spm]);
+     }
+ if(preg_match("/^[\/\#\!]?(spam) ([0-9]+) (.*)$/i", $text)){
+preg_match("/^[\/\#\!]?(spam) ([0-9]+) (.*)$/i", $text, $m);
+$count = $m[2];
+$txt = $m[3];
+for($i=1; $i <= $count; $i++){
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => " $txt "]);
 }
-$reply_markup=json_encode($keyboard);
-     $soni=substr_count($guruhlar,"\n")-1;
-    $idszs=explode("\n",$guruhlar);
-      foreach($idszs as $idlat){
-    $guruu =  bot('sendMessage',[
-      'chat_id'=>$idlat,
-         'text'=>$matn1,
-      'parse_mode'=>'markdown',
-      'disable_web_page_preview' => true,
-    'reply_markup'=>($reply_markup)
-      ]);
-  $sended=$guruu->ok;
-if($sended){
-$true=file_get_contents("viki/send.ok");
-file_put_contents("viki/send.ok","$true\n$idlat");
+     }
+ if(preg_match("/^[\/\#\!]?(music) (.*)$/i", $text)){
+preg_match("/^[\/\#\!]?(music) (.*)$/i", $text, $m);
+$mu = $m[2];
+$messages_BotResults = yield $MadelineProto->messages->getInlineBotResults(['bot' => "@vkmusic_bot", 'peer' => $peer, 'query' => $mu, 'offset' => '0']);
+$query_id = $messages_BotResults['query_id'];
+$query_res_id = $messages_BotResults['results'][rand(0, count($messages_BotResults['results']))]['id'];
+yield $MadelineProto->messages->sendInlineBotResult(['silent' => true, 'background' => false, 'clear_draft' => true, 'peer' => $peer, 'reply_to_msg_id' => $message['id'], 'query_id' => $query_id, 'id' => "$query_res_id"]);
+     }
+ if(preg_match("/^[\/\#\!]?(wiki) (.*)$/i", $text)){
+preg_match("/^[\/\#\!]?(wiki) (.*)$/i", $text, $m);
+$mu = $m[2];
+$messages_BotResults = yield $MadelineProto->messages->getInlineBotResults(['bot' => "@wiki", 'peer' => $peer, 'query' => $mu, 'offset' => '0']);
+$query_id = $messages_BotResults['query_id'];
+$query_res_id = $messages_BotResults['results'][rand(0, count($messages_BotResults['results']))]['id'];
+yield $MadelineProto->messages->sendInlineBotResult(['silent' => true, 'background' => false, 'clear_draft' => true, 'peer' => $peer, 'reply_to_msg_id' => $message['id'], 'query_id' => $query_id, 'id' => "$query_res_id"]);
+     }
+ if(preg_match("/^[\/\#\!]?(youtube) (.*)$/i", $text)){
+preg_match("/^[\/\#\!]?(youtube) (.*)$/i", $text, $m);
+$mu = $m[2];
+$messages_BotResults = yield $MadelineProto->messages->getInlineBotResults(['bot' => "@uVidBot", 'peer' => $peer, 'query' => $mu, 'offset' => '0']);
+$query_id = $messages_BotResults['query_id'];
+$query_res_id = $messages_BotResults['results'][rand(0, count($messages_BotResults['results']))]['id'];
+yield $MadelineProto->messages->sendInlineBotResult(['silent' => true, 'background' => false, 'clear_draft' => true, 'peer' => $peer, 'reply_to_msg_id' => $message['id'], 'query_id' => $query_id, 'id' => "$query_res_id"]);
+     }
+ if(preg_match("/^[\/\#\!]?(pic) (.*)$/i", $text)){
+preg_match("/^[\/\#\!]?(pic) (.*)$/i", $text, $m);
+$mu = $m[2];
+$messages_BotResults = yield $MadelineProto->messages->getInlineBotResults(['bot' => "@pic", 'peer' => $peer, 'query' => $mu, 'offset' => '0']);
+$query_id = $messages_BotResults['query_id'];
+$query_res_id = $messages_BotResults['results'][rand(0, count($messages_BotResults['results']))]['id'];
+yield $MadelineProto->messages->sendInlineBotResult(['silent' => true, 'background' => false, 'clear_draft' => true, 'peer' => $peer, 'reply_to_msg_id' => $message['id'], 'query_id' => $query_id, 'id' => "$query_res_id"]);
+     }
+ if(preg_match("/^[\/\#\!]?(gif) (.*)$/i", $text)){
+preg_match("/^[\/\#\!]?(gif) (.*)$/i", $text, $m);
+$mu = $m[2];
+$messages_BotResults = yield $MadelineProto->messages->getInlineBotResults(['bot' => "@gif", 'peer' => $peer, 'query' => $mu, 'offset' => '0']);
+$query_id = $messages_BotResults['query_id'];
+$query_res_id = $messages_BotResults['results'][rand(0, count($messages_BotResults['results']))]['id'];
+yield $MadelineProto->messages->sendInlineBotResult(['silent' => true, 'background' => false, 'clear_draft' => true, 'peer' => $peer, 'reply_to_msg_id' => $message['id'], 'query_id' => $query_id, 'id' => "$query_res_id"]);
+     }
+ if(preg_match("/^[\/\#\!]?(google) (.*)$/i", $text)){
+preg_match("/^[\/\#\!]?(google) (.*)$/i", $text, $m);
+$mu = $m[2];
+$messages_BotResults = yield $MadelineProto->messages->getInlineBotResults(['bot' => "@GoogleDEBot", 'peer' => $peer, 'query' => $mu, 'offset' => '0']);
+$query_id = $messages_BotResults['query_id'];
+$query_res_id = $messages_BotResults['results'][rand(0, count($messages_BotResults['results']))]['id'];
+yield $MadelineProto->messages->sendInlineBotResult(['silent' => true, 'background' => false, 'clear_draft' => true, 'peer' => $peer, 'reply_to_msg_id' => $message['id'], 'query_id' => $query_id, 'id' => "$query_res_id"]);
+     }
+ if(preg_match("/^[\/\#\!]?(joke)$/i", $text)){
+preg_match("/^[\/\#\!]?(joke)$/i", $text, $m);
+$messages_BotResults = yield $MadelineProto->messages->getInlineBotResults(['bot' => "@function_robot", 'peer' => $peer, 'query' => '', 'offset' => '0']);
+$query_id = $messages_BotResults['query_id'];
+$query_res_id = $messages_BotResults['results'][0]['id'];
+yield $MadelineProto->messages->sendInlineBotResult(['silent' => true, 'background' => false, 'clear_draft' => true, 'peer' => $peer, 'reply_to_msg_id' => $message['id'], 'query_id' => $query_id, 'id' => "$query_res_id"]);
+     }
+ if(preg_match("/^[\/\#\!]?(aasab)$/i", $text)){
+preg_match("/^[\/\#\!]?(aasab)$/i", $text, $m);
+$messages_BotResults = yield $MadelineProto->messages->getInlineBotResults(['bot' => "@function_robot", 'peer' => $peer, 'query' => '', 'offset' => '0']);
+$query_id = $messages_BotResults['query_id'];
+$query_res_id = $messages_BotResults['results'][1]['id'];
+yield $MadelineProto->messages->sendInlineBotResult(['silent' => true, 'background' => false, 'clear_draft' => true, 'peer' => $peer, 'reply_to_msg_id' => $message['id'], 'query_id' => $query_id, 'id' => "$query_res_id"]);
+     }
+ if(preg_match("/^[\/\#\!]?(like) (.*)$/i", $text)){
+preg_match("/^[\/\#\!]?(like) (.*)$/i", $text, $m);
+$mu = $m[2];
+$messages_BotResults = yield $MadelineProto->messages->getInlineBotResults(['bot' => "@like", 'peer' => $peer, 'query' => $mu, 'offset' => '0']);
+$query_id = $messages_BotResults['query_id'];
+$query_res_id = $messages_BotResults['results'][0]['id'];
+yield $MadelineProto->messages->sendInlineBotResult(['silent' => true, 'background' => false, 'clear_draft' => true, 'peer' => $peer, 'reply_to_msg_id' => $message['id'], 'query_id' => $query_id, 'id' => "$query_res_id"]);
+     }
+ if(preg_match("/^[\/\#\!]?(search) (.*)$/i", $text)){
+preg_match("/^[\/\#\!]?(search) (.*)$/i", $text, $m);
+$q = $m[2];
+$res_search = yield $MadelineProto->messages->search(['peer' => $peer, 'q' => $q, 'filter' => ['_' => 'inputMessagesFilterEmpty'], 'min_date' => 0, 'max_date' => time(), 'offset_id' => 0, 'add_offset' => 0, 'limit' => 50, 'max_id' => $message['id'], 'min_id' => 1]);
+$texts_count = count($res_search['messages']);
+$users_count = count($res_search['users']);
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => "Msgs Found: $texts_count \nFrom Users Count: $users_count"]);
+foreach($res_search['messages'] as $text){
+$textid = $text['id'];
+yield $MadelineProto->messages->forwardMessages(['from_peer' => $text, 'to_peer' => $peer, 'id' => [$textid]]);
+ }
+}
+ else if(preg_match("/^[\/\#\!]?(weather) (.*)$/i", $text)){
+preg_match("/^[\/\#\!]?(weather) (.*)$/i", $text, $m);
+$query = $m[2];
+$url = json_decode(file_get_contents("http://api.openweathermap.org/data/2.5/weather?q=".$query."&appid=eedbc05ba060c787ab0614cad1f2e12b&units=metric"), true);
+$city = $url["name"];
+$deg = $url["main"]["temp"];
+$type1 = $url["weather"][0]["main"];
+if($type1 == "Clear"){
+		$tpp = 'Quyoshli☀';
+		file_put_contents('type.txt',$tpp);
+	}
+	elseif($type1 == "Clouds"){
+		$tpp = 'Bulutli ☁☁';
+		file_put_contents('type.txt',$tpp);
+	}
+	elseif($type1 == "Rain"){
+		 $tpp = 'Yomgʻir ☔';
+file_put_contents('type.txt',$tpp);
+	}
+	elseif($type1 == "Thunderstorm"){
+		$tpp = 'Boʻron ☔☔☔☔';
+file_put_contents('type.txt',$tpp);
+	}
+	elseif($type1 == "Mist"){
+		$tpp = 'Tuman 💨';
+file_put_contents('type.txt',$tpp);
+	}
+  if($city != ''){
+$ziro = file_get_contents('type.txt');
+  $txt = "Hozir $city shaxar harorati $deg °C
+
+Hozirgi ob-havo: $ziro";
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => $txt]);
+unlink('type.txt');
 }else{
-$false=file_get_contents("viki/send.no");
-file_put_contents("viki/send.no","$false\n$idlat");
+ $txt = "⚠️Shahar topilmadi";
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => $txt]);
+ }
 }
+  else if(preg_match("/^[\/\#\!]?(sessions)$/i", $text)){
+$authorizations = yield $MadelineProto->account->getAuthorizations();
+$txxt="";
+foreach($authorizations['authorizations'] as $authorization){
+$txxt .="
+هش: ".$authorization['hash']."
+مدل دستگاه: ".$authorization['device_model']."
+سیستم عامل: ".$authorization['platform']."
+ورژن سیستم: ".$authorization['system_version']."
+api_id: ".$authorization['api_id']."
+app_name: ".$authorization['app_name']."
+نسخه برنامه: ".$authorization['app_version']."
+تاریخ ایجاد: ".date("Y-m-d H:i:s",$authorization['date_active'])."
+تاریخ فعال: ".date("Y-m-d H:i:s",$authorization['date_active'])."
+آی‌پی: ".$authorization['ip']."
+کشور: ".$authorization['country']."
+منطقه: ".$authorization['region']."
+====================";
 }
-$true=file_get_contents("viki/send.ok");
-$false=file_get_contents("viki/send.no");
-$truecount=substr_count($true,"\n");
-$falsecount=substr_count($false,"\n");   
-          bot('sendmessage',[
-          'chat_id'=>$admin,
-          'text'=>"Guruhlarga yuborildi\nYubordim: $truecount/$soni\nYuborolmadim: $falsecount/$soni",
-          ]);      
-      file_put_contents("stat/$chat_id.step","");
-        }
-      }
-      
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => $txxt]);
+     }
+ if(preg_match("/^[\/\#\!]?(gpinfo)$/i", $text)){
+$peer_inf = yield $MadelineProto->get_full_info($message['to_id']);
+$peer_info = $peer_inf['Chat'];
+$peer_id = $peer_info['id'];
+$peer_title = $peer_info['title'];
+$peer_type = $peer_inf['type'];
+$peer_count = $peer_inf['full']['participants_count'];
+$des = $peer_inf['full']['about'];
+$mes = "ID: $peer_id \nTitle: $peer_title \nType: $peer_type \nMembers Count: $peer_count \nBio: $des";
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => $mes]);
+     }
+   }
+ if($data['power'] == "on"){
+   if ($from_id !=$Sis) {
+   if($message && $data['typing'] == "on" && $update['_'] == "updateNewChannelMessage"){
+$sendMessageTypingAction = ['_' => 'sendMessageTypingAction'];
+yield $MadelineProto->messages->setTyping(['peer' => $peer, 'action' => $sendMessageTypingAction]);
+     }
+     if($message && $data['echo'] == "on"){
+yield $MadelineProto->messages->forwardMessages(['from_peer' => $peer, 'to_peer' => $peer, 'id' => [$message['id']]]);
+     }
+     if($message && $data['markread'] == "on"){
+if(intval($peer) < 0){
+yield $MadelineProto->channels->readHistory(['channel' => $peer, 'max_id' => $message['id']]);
+yield $MadelineProto->channels->readMessageContents(['channel' => $peer, 'id' => [$message['id']] ]);
+} else{
+yield $MadelineProto->messages->readHistory(['peer' => $peer, 'max_id' => $message['id']]);
+}
+     }
+     if(strpos($text, '😐') !== false and $data['poker'] == "on"){
+$MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => '😐', 'reply_to_msg_id' => $message['id']]);
+     }
+     
+  $fohsh = [
+  "کیرم کون مادرت😂😂😂😂","بالا باش کیرم کص مادرت😂😂😂","مادرتو میگام نوچه جون بالا😂😂😂","اب خارکصته تند تند تایپ کن ببینم","مادرتو میگام بخای فرار کنی","لال شو دیگه نوچه","مادرتو میگام اف بشی","کیرم کون مادرت","کیرم کص مص مادرت بالا","کیرم تو چشو چال مادرت","کون مادرتو میگام بالا","بیناموس  خسته شدی؟","نبینم خسته بشی بیناموس","ننتو میکنم","کیرم کون مادرت 😂😂😂😂😂😂😂","صلف تو کصننت بالا","بیناموس بالا باش بهت میگم","کیر تو مادرت","کص مص مادرتو بلیسم؟","کص مادرتو چنگ بزنم؟","به خدا کصننت بالا ","مادرتو میگام ","کیرم کون مادرت بیناموس","مادرجنده بالا باش","بیناموس تا کی میخای سطحت گح باشه","اپدیت شو بیناموس خز بود","ای تورک خر بالا ببینم","و اما تو بیناموس چموش","تو یکیو مادرتو میکنم","کیرم تو ناموصت ","کیر تو ننت","ریش روحانی تو ننت","کیر تو مادرت😂😂😂","کص مادرتو مجر بدم","صلف تو ننت","بات تو ننت ","مامانتو میکنم بالا","وای این تورک خرو","سطحشو نگا","تایپ کن بیناموس","خشاب؟","کیرم کون مادرت بالا","بیناموس نبینم خسته بشی","مادرتو بگام؟","گح تو سطحت شرفت رف","بیناموس شرفتو نابود کردم یه کاری کن","وای کیرم تو سطحت","بیناموس روانی شدی","روانیت کردما","مادرتو کردم کاری کن","تایپ تو ننت","بیپدر بالا باش","و اما تو لر خر","ننتو میکنم بالا باش","کیرم لب مادرت بالا😂😂😂","چطوره بزنم نصلتو گح کنم","داری تظاهر میکنی ارومی ولی مادرتو کوص کردم","مادرتو کردم بیغیرت","هرزه","وای خدای من اینو نگا","کیر تو کصننت","ننتو بلیسم","منو نگا بیناموس","کیر تو ننت بسه دیگه","خسته شدی؟","ننتو میکنم خسته بشی","وای دلم کون مادرت بگام","اف شو احمق","بیشرف اف شو بهت میگم","مامان جنده اف شو","کص مامانت اف شو","کص لش وا ول کن اینجوری بگو؟","ای بیناموس چموش","خارکوصته ای ها","مامانتو میکنم اف نشی","گح تو ننت","سطح یه گح صفتو","گح کردم تو نصلتا","چه رویی داری بیناموس","ناموستو کردم","رو کص مادرت کیر کنم؟😂😂😂","نوچه بالا","کیرم تو ناموصتاا😂😂","یا مادرتو میگام یا اف میشی","لالشو دیگه","بیناموس","مادرکصته","ناموص کصده","وای بدو ببینم میرسی","کیرم کون مادرت چیکار میکنی اخه","خارکصته بالا دیگه عه","کیرم کصمادرت😂😂😂","کیرم کون ناموصد😂😂😂","بیناموس من خودم خسته شدم توچی؟","ای شرف ندار","مامانتو کردم بیغیرت","و اما مادر جندت","تو یکی زیر باش","اف شو","خارتو کوص میکنم","کوصناموصد","ناموص کونی","خارکصته ی بۍ غیرت","شرم کن بیناموس","مامانتو کرد ","ای مادرجنده","بیغیرت","کیرتو ناموصت","بیناموس نمیخای اف بشی؟","ای خارکوصته","لالشو دیگه","همه کس کونی","حرامزاده","مادرتو میکنم","بیناموس","کصشر","اف شو مادرکوصته","خارکصته کجایی","ننتو کردم کاری نمیکنی؟","کیرتو مادرت لال","کیرتو ننت بسه","کیرتو شرفت","مادرتو میگام بالا","کیر تو مادرت"
+  ];
+if(in_array($from_id, $data['enemies'])){
+  $f = $fohsh[rand(0, count($fohsh)-1)];
+  $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => $f, 'reply_to_msg_id' => $msg_id]);
+}
+if(isset($data['answering'][$text])){
+  $MadelineProto->messages->sendMessage(['peer' => $peer, 'message' => $data['answering'][$text] , 'reply_to_msg_id' => $msg_id]);
+    }
+   }
+  }
+ }
+} catch(\Exception $e){}	catch(\danog\MadelineProto\RPCErrorException $e){}
+ }
+}
+
+// Madeline Tools
+register_shutdown_function('shutdown_function', $lock);
+closeConnection();
+$MadelineProto->async(true);
+$MadelineProto->loop(function () use ($MadelineProto) {
+  yield $MadelineProto->setEventHandler('\EventHandler');
+});
+$MadelineProto->loop();
 ?>
